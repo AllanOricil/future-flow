@@ -5,3 +5,4 @@ bell.svg
 *.html
 index.js
 lib/index.js
+.npmignore
