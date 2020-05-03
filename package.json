@@ -16,6 +16,11 @@
     "unpkg": "./lib/index.min.js",
     "author": "allanoricil",
     "license": "ISC",
+    "keywords": [
+        "flow",
+        "flow generator",
+        "flow builder"
+    ],
     "devDependencies": {
         "babel-cli": "^6.26.0",
         "babel-preset-env": "^1.7.0",
