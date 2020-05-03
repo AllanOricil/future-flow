@@ -1,6 +1,6 @@
 {
     "name": "future-flow",
-    "version": "0.0.1",
+    "version": "0.0.1-1",
     "description": "Flow diagram creator with HTML5 Canvas",
     "browser": "./lib/index.min.js",
     "homepage": "https://github.com/AllanOricil/future-flow#readme",
