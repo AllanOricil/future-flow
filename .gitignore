@@ -1,8 +1,7 @@
 node_modules
 .vscode
-build
-bell.svg
-*.html
+/bell.svg
+/index.html
 index.js
 lib/index.js
 .npmignore
