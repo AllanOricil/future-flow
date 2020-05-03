@@ -2,6 +2,8 @@
 
 This project aims to be a simple Flow generator using HTML5 Canvas.
 
+[DEMO](https://naughty-dijkstra-92979d.netlify.app)
+
 ## Features:
 
 -   [x] Configure Blocks using a js object or JSON
@@ -25,5 +27,3 @@ or use the CDN
 ## Pictures
 
 ![simple-flow](images/simple_flow.JPG)
-
-## Demo
