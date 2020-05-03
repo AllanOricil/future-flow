@@ -1,0 +1,7 @@
+node_modules
+.vscode
+build
+bell.svg
+*.html
+index.js
+lib/index.js
