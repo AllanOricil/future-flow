@@ -22,7 +22,7 @@ npm i future-flow
 or use the CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-1/lib/index.min.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.1-3/lib/index.min.js"></script>
 ```
 
 ## Pictures
