@@ -9,7 +9,7 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 -   [x] Configure Blocks using a js object or JSON
 -   [x] Zoom
 -   [x] Pan
--   [ ] Mobile Ready
+-   [ ] Mobile Ready - In Progress
 
 ## How to Install
 
@@ -22,7 +22,7 @@ npm i future-flow
 or use the CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-3/lib/index.min.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.1-4/lib/index.min.js"></script>
 ```
 
 ## Pictures
