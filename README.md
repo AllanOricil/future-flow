@@ -27,4 +27,4 @@ or use the CDN
 
 ## Pictures
 
-![simple-flow](images/simple_flow.JPG)
+![simple-flow](/images/simple_flow.JPG)
