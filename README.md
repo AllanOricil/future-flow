@@ -9,6 +9,7 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 -   [x] Configure Blocks using a js object or JSON
 -   [x] Zoom
 -   [x] Pan
+-   [ ] Mobile Ready
 
 ## How to Install
 

@@ -1,6 +1,6 @@
 {
     "name": "future-flow",
-    "version": "0.0.1-2",
+    "version": "0.0.1-3",
     "description": "Flow diagram creator with HTML5 Canvas",
     "browser": "./lib/index.min.js",
     "homepage": "https://github.com/AllanOricil/future-flow#readme",
@@ -19,7 +19,12 @@
     "keywords": [
         "flow",
         "flow generator",
-        "flow builder"
+        "flow builder",
+        "flochart",
+        "flow diagram",
+        "diagram",
+        "javascript",
+        "canvas"
     ],
     "devDependencies": {
         "babel-cli": "^6.26.0",
