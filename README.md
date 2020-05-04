@@ -1,3 +1,6 @@
+![](https://badgen.net/npm/v/future-flow)
+![](https://badgen.net/npm/dt/future-flow)
+![](https://badgen.net/npm/dependents/future-flow)
 ![](https://badgen.net/bundlephobia/min/future-flow)
 
 # Future Flow
