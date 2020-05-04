@@ -9,6 +9,8 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 
 [DEMO](https://naughty-dijkstra-92979d.netlify.app)
 
+![Animated Demo](demo/demo.gif)
+
 ## Features:
 
 -   [x] Import Flow using JS Object or JSON
