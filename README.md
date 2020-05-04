@@ -1,3 +1,5 @@
+![](https://badgen.net/bundlephobia/min/future-flow)
+
 # Future Flow
 
 This project aims to be a simple Flow generator using HTML5 Canvas.
