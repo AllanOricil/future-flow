@@ -1,19 +1,19 @@
 {
     "name": "future-flow",
-    "version": "0.0.1-5",
+    "version": "0.0.1-9",
     "description": "Flow diagram creator with HTML5 Canvas",
-    "browser": "./lib/index.min.js",
+    "browser": "./dist/index.min.js",
     "homepage": "https://github.com/AllanOricil/future-flow#readme",
     "scripts": {
-        "minify": "babel index.js -d build",
-        "uglify": "uglifyjs lib/index.js -o lib/index.min.js -c -m",
-        "build": "babel index.js -d lib && uglifyjs lib/index.js -o lib/index.min.js -c -m"
+        "minify": "babel index.js -d dist",
+        "uglify": "uglifyjs dist/index.js -o dist/index.min.js -c -m",
+        "build": "babel index.js -d dist && uglifyjs dist/index.js -o dist/index.min.js -c -m"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/AllanOricil/future-flow"
     },
-    "unpkg": "./lib/index.min.js",
+    "unpkg": "./dist/index.min.js",
     "author": "allanoricil",
     "license": "ISC",
     "keywords": [

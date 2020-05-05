@@ -5,3 +5,4 @@ node_modules
 index.js
 lib/index.js
 .npmignore
+src/
