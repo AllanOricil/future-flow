@@ -1,38 +1,40 @@
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Future Flow Demo</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="https://unpkg.com/future-flow@0.0.1-10/lib/index.min.js"></script>
-        <style>
-            body {
-                margin: 0px;
-                overflow: hidden;
-            }
-        </style>
-    </head>
 
-    <body onload="initCanvas()">
-        <div style="width: 100%; overflow: hidden; position: absolute">
-            <ul>
-                <li>Double click/touch anywhere to place a block.</li>
-                <li>
-                    To move a block just click above it, hold your click, and
-                    move the mouse around.
-                </li>
-                <li>
-                    Click/touch anywhere in the canvas to move its position
-                    (Pan).
-                </li>
-                <li>Scroll Up or Down to Zoom In or Out.</li>
-                <li>
-                    Click on a block, and then click on another to create a
-                    Connection. If you clicked outside, you deselected all the
-                    blocks.
-                </li>
-            </ul>
-        </div>
-        <canvas id="canvas"></canvas>
-    </body>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Future Flow Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/future-flow@0.0.1-10/dist/index.min.js"></script>
+    <style>
+        body {
+            margin: 0px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body onload="initCanvas()">
+    <div style="width: 100%; overflow: hidden; position: absolute">
+        <ul>
+            <li>Double click/touch anywhere to place a block.</li>
+            <li>
+                To move a block just click above it, hold your click, and
+                move the mouse around.
+            </li>
+            <li>
+                Click/touch anywhere in the canvas to move its position
+                (Pan).
+            </li>
+            <li>Scroll Up or Down to Zoom In or Out.</li>
+            <li>
+                Click on a block, and then click on another to create a
+                Connection. If you clicked outside, you deselected all the
+                blocks.
+            </li>
+        </ul>
+    </div>
+    <canvas id="canvas"></canvas>
+</body>
+
 </html>
