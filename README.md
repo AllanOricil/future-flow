@@ -35,7 +35,7 @@ npm i future-flow
 Using CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-9/lib/index.min.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.1-10/lib/index.min.js"></script>
 ```
 
 ## Example
@@ -43,7 +43,7 @@ Using CDN
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.1-9/lib/index.min.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.1-10/lib/index.min.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
