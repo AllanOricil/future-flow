@@ -24,37 +24,29 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 -   [ ] Export Flow as Image
 -   [ ] Animations
 
-## How to Install
+# How to use
 
-Using NPM
+## Nuxtjs
+
+First, install the package with npm
 
 ```terminal
-npm i future-flow
+npm i future-flow --save
 ```
 
-Using CDN
+Then in your Component
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-10/lib/index.min.js"></script>
-```
-
-## Example
-
-```html
-<html>
-    <head>
-        <script src="https://unpkg.com/future-flow@0.0.1-10/lib/index.min.js"></script>
-    </head>
-    <body>
+<template>
+    <div class="d-flex flex-column flex-grow-1 vh-100">
         <canvas id="canvas"></canvas>
-    </body>
+    </div>
+</template>
 
-    <script>
-        startFutureFlow()
-
-        const startFutureFlow = () => {
-            const el = document.getElementById('canvas')
-
+<script>
+    import { Flow } from 'future-flow'
+    export default {
+        mounted() {
             const options = {
                 background: {
                     color: 'rgb(255,255,255)',
@@ -73,19 +65,25 @@ Using CDN
             }
 
             const data = {
-                a: {
+                start: {
                     x: 50,
-                    y: 50,
-                    isDraggable: true,
-                    connections: ['b', 'c'],
+                    y: 72,
+                    isDraggable: false,
+                    connections: ['stage1'],
                     background: {
-                        color: 'rgb(255,255,255)',
+                        color: '#12e445',
                     },
                     border: {
-                        radius: 10,
+                        radius: 20,
+                        padding: {
+                            top: 50,
+                            right: 50,
+                            bottom: 50,
+                            left: 50,
+                        },
                         normal: {
                             width: 2,
-                            color: 'rgb(0,0,0,0.2)',
+                            color: 'transparent',
                         },
                         selected: {
                             width: 2,
@@ -96,53 +94,12 @@ Using CDN
                             color: 'black',
                         },
                     },
-                    shadow: {
-                        color: 'rgba(0,0,0,0.2)',
-                        blur: 6,
-                        offset: {
-                            x: 5,
-                            y: 5,
-                        },
-                    },
-                    header: {
-                        text: 'lor sit amet orci efficitur',
-                        alignment: 'start',
-                        divider: {
-                            width: 1,
-                            color: 'rgba(0,0,0,0.2)',
-                        },
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
                     body: {
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at consectetur lorem. Etiam dignissim dolor sit amet orci efficitur auctor.',
+                        text: 'Start',
                         alignment: 'start',
                         divider: {
                             width: 1,
-                            color: 'rgba(0,0,0,0.2)',
-                        },
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
-                    footer: {
-                        text: 'lor sit amet orci efficitur',
-                        alignment: 'start',
-                        divider: {
-                            width: 1,
-                            color: 'rgba(0,0,0,0.2)',
+                            color: 'rgb(0,0,0)',
                         },
                         font: {
                             family: 'Arial',
@@ -154,13 +111,28 @@ Using CDN
                         },
                     },
                 },
-                b: {
-                    x: 400,
-                    y: 400,
+                stage1: {
+                    x: 300,
+                    y: 45,
                     isDraggable: true,
-                    connections: ['c'],
+                    connections: ['end'],
+                    border: {
+                        radius: 20,
+                        normal: {
+                            width: 5,
+                            color: 'rgba(0,0,0,0.2)',
+                        },
+                        selected: {
+                            width: 2,
+                            color: 'black',
+                        },
+                        hover: {
+                            width: 2,
+                            color: 'black',
+                        },
+                    },
                     header: {
-                        text: 'Header',
+                        text: 'Alert',
                         alignment: 'start',
                         font: {
                             family: 'Arial',
@@ -170,22 +142,19 @@ Using CDN
                             size: 20,
                             weight: 'bold',
                         },
-                        icon: './bell.svg',
+                        padding: {
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                            bottom: 15,
+                        },
+                        divider: {
+                            color: 'rgba(0,0,0,0.2)',
+                            width: 2,
+                        },
                     },
                     body: {
-                        text: 'Body',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
-                    footer: {
-                        text: 'Footer',
+                        text: 'New Event Created',
                         alignment: 'start',
                         font: {
                             family: 'Arial',
@@ -197,20 +166,248 @@ Using CDN
                         },
                     },
                 },
-                c: {
+                end: {
                     x: 700,
-                    y: 800,
-                    connections: ['a'],
+                    y: 72,
+                    isDraggable: true,
+                    isConnectable: true,
+                    canConnect: true,
+                    background: {
+                        color: 'rgb(255,0,0)',
+                    },
+                    border: {
+                        radius: 20,
+                        padding: {
+                            top: 50,
+                            right: 50,
+                            bottom: 50,
+                            left: 50,
+                        },
+                        normal: {
+                            width: 2,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 2,
+                            color: 'black',
+                        },
+                        hover: {
+                            width: 2,
+                            color: 'black',
+                        },
+                    },
+                    body: {
+                        text: 'End',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgba(0,0,0,0.6)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                    },
                 },
             }
 
-            const canvas = new Canvas(el, {
-                w: window.innerWidth,
-                h: window.innerHeight,
-                options,
-                data,
-            })
+            // eslint-disable-next-line no-unused-vars
+            const flow = new Flow({ options, data })
+        },
+    }
+</script>
+
+<style></style>
+```
+
+## Browser
+
+Add a script tag poiting to npm CDN
+
+```html
+<script src="https://unpkg.com/future-flow@0.0.1-35/lib/index.min.js"></script>
+```
+
+Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
+
+```html
+<html>
+    <head>
+        <script src="https://unpkg.com/future-flow@0.0.1-35/lib/index.min.js"></script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+    </body>
+
+    <script>
+        const options = {
+            background: {
+                color: 'rgb(255,255,255)',
+            },
+            fps: 60,
+            zoom: {
+                level: 1,
+                max: 2,
+                min: 0.2,
+            },
+            isDebugging: false,
+            drawOrigin: true,
+            editor: false,
+            canMoveBlocks: true,
+            autoArrange: false,
         }
+
+        const data = {
+            start: {
+                x: 50,
+                y: 72,
+                isDraggable: false,
+                connections: ['stage1'],
+                background: {
+                    color: '#12e445',
+                },
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
+                },
+                body: {
+                    text: 'Start',
+                    alignment: 'start',
+                    divider: {
+                        width: 1,
+                        color: 'rgb(0,0,0)',
+                    },
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            stage1: {
+                x: 300,
+                y: 45,
+                isDraggable: true,
+                connections: ['end'],
+                border: {
+                    radius: 20,
+                    normal: {
+                        width: 5,
+                        color: 'rgba(0,0,0,0.2)',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
+                },
+                header: {
+                    text: 'Alert',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                    padding: {
+                        top: 15,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                    },
+                    divider: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 2,
+                    },
+                },
+                body: {
+                    text: 'New Event Created',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            end: {
+                x: 700,
+                y: 72,
+                isDraggable: true,
+                isConnectable: true,
+                canConnect: true,
+                background: {
+                    color: 'rgb(255,0,0)',
+                },
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
+                },
+                body: {
+                    text: 'End',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+        }
+
+        const flow = new futureFlow.Flow({
+            options,
+            data,
+        })
     </script>
 </html>
 ```
