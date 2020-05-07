@@ -11,7 +11,7 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 
 ![Animated Demo](demo/demo.gif)
 
-## Features:
+# Features
 
 -   [x] Import Flow using JS Object or JSON
 -   [x] Zoom
@@ -25,6 +25,9 @@ This project aims to be a simple Flow generator using HTML5 Canvas.
 -   [ ] Animations
 
 # How to use
+
+-   [Nuxtjs](#nuxtjs)
+-   [Browser](#browser)
 
 ## Nuxtjs
 
@@ -225,7 +228,7 @@ Then in your Component
 Add a script tag poiting to npm CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-35/lib/index.min.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.1-36/lib/index.min.js"></script>
 ```
 
 Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
@@ -233,7 +236,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.1-35/lib/index.min.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.1-36/lib/index.min.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
