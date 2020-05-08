@@ -1,432 +1,512 @@
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Future Flow Demo</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="https://unpkg.com/future-flow@0.0.1-37/dist/future-flow.js"></script>
-        <style>
-            body {
-                margin: 0px;
-                overflow: hidden;
-            }
-        </style>
-    </head>
 
-    <body>
-        <div style="width: 100%; overflow: hidden; position: absolute">
-            <ul>
-                <li>Double click/touch anywhere to place a block.</li>
-                <li>
-                    To move a block just click above it, hold your click, and
-                    move the mouse around.
-                </li>
-                <li>
-                    Click/touch anywhere in the canvas to move its position
-                    (Pan).
-                </li>
-                <li>Scroll Up or Down to Zoom In or Out.</li>
-                <li>
-                    Click on a block, and then click on another to create a
-                    Connection. If you clicked outside, you deselected all the
-                    blocks.
-                </li>
-                <li>Mouse Enter Entity: <span id="mouseenterentity"></span></li>
-                <li>Hover Leave Entity: <span id="mouseleaveentity"></span></li>
-            </ul>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Future Flow Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+    <script src="https://unpkg.com/future-flow@0.0.1-38/dist/future-flow.js"></script>
+    <style>
+        body {
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        .string {
+            color: green;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex flex-row" style="height: 100%">
+        <div class="d-flex flex-colum" s>
+            <pre id="entity" style="width: 500px !important; max-width: 500px !important"></pre>
         </div>
-        <canvas id="canvas"></canvas>
 
-        <script>
-            const options = {
+        <div class="d-flex flex-column w-100 h-100">
+            <div class="d-flex" style="position:absolute; overflow: hidden;">
+                <div>
+                    <ul>
+                        <li>Double click/touch anywhere to place a block.</li>
+                        <li>
+                            To move a block just click above it, hold your click, and
+                            move the mouse around.
+                        </li>
+                        <li>
+                            Click/touch anywhere in the canvas to move its position
+                            (Pan).
+                        </li>
+                        <li>Scroll Up or Down to Zoom In or Out.</li>
+                        <li>
+                            Click on a block, and then click on another to create a
+                            Connection. If you clicked outside, you deselected all the
+                            blocks.
+                        </li>
+                        <li>Mouse Enter Entity: <span id="mouseenterentity"></span></li>
+                        <li>Hover Leave Entity: <span id="mouseleaveentity"></span></li>
+                        <li>Touch Start Entity: <span id="touchstartentity"></span></li>
+                        <li>Touch End Entity: <span id="touchendentity"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="d-flex flex-grow-1 h-100">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <script type="text/javascript">
+        const options = {
+            background: {
+                color: 'rgb(255,255,255)',
+            },
+            fps: 60,
+            zoom: {
+                level: 1,
+                max: 2,
+                min: 0.2,
+            },
+            isDebugging: false,
+            drawOrigin: true,
+            editor: false,
+            canMoveBlocks: true,
+            autoArrange: false,
+        }
+
+        let data = {
+            start: {
+                x: 50,
+                y: 72,
+                isDraggable: false,
+                connections: ['stage1'],
                 background: {
-                    color: 'rgb(255,255,255)',
+                    color: '#12e445',
                 },
-                fps: 60,
-                zoom: {
-                    level: 1,
-                    max: 2,
-                    min: 0.2,
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
                 },
-                isDebugging: false,
-                drawOrigin: true,
-                editor: false,
-                canMoveBlocks: true,
-                autoArrange: false,
-            }
+                body: {
+                    text: 'Start',
+                    alignment: 'start',
+                    divider: {
+                        width: 1,
+                        color: 'rgb(0,0,0)',
+                    },
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            stage1: {
+                x: 300,
+                y: 45,
+                isDraggable: true,
+                connections: ['end'],
+                border: {
+                    radius: 20,
+                    normal: {
+                        width: 5,
+                        color: 'rgba(0,0,0,0.2)',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
+                },
+                header: {
+                    text: 'Alert',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                    padding: {
+                        top: 15,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                    },
+                    divider: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 2,
+                    },
+                },
+                body: {
+                    text: 'New Event Created',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            end: {
+                x: 700,
+                y: 72,
+                isDraggable: true,
+                isConnectable: true,
+                canConnect: true,
+                background: {
+                    color: 'rgb(255,0,0)',
+                },
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
+                    },
+                    selected: {
+                        width: 2,
+                        color: 'black',
+                    },
+                    hover: {
+                        width: 2,
+                        color: 'black',
+                    },
+                },
+                body: {
+                    text: 'End',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+        }
 
-            let data = {
-                start: {
-                    x: 50,
-                    y: 72,
-                    isDraggable: false,
-                    connections: ['stage1'],
-                    background: {
-                        color: '#12e445',
-                    },
-                    border: {
-                        radius: 20,
-                        padding: {
-                            top: 50,
-                            right: 50,
-                            bottom: 50,
-                            left: 50,
-                        },
-                        normal: {
-                            width: 2,
-                            color: 'transparent',
-                        },
-                        selected: {
-                            width: 2,
-                            color: 'black',
-                        },
-                        hover: {
-                            width: 2,
-                            color: 'black',
-                        },
-                    },
-                    body: {
-                        text: 'Start',
-                        alignment: 'start',
-                        divider: {
-                            width: 1,
-                            color: 'rgb(0,0,0)',
-                        },
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
-                },
-                stage1: {
-                    x: 300,
-                    y: 45,
-                    isDraggable: true,
-                    connections: ['end'],
-                    border: {
-                        radius: 20,
-                        normal: {
-                            width: 5,
-                            color: 'rgba(0,0,0,0.2)',
-                        },
-                        selected: {
-                            width: 2,
-                            color: 'black',
-                        },
-                        hover: {
-                            width: 2,
-                            color: 'black',
-                        },
-                    },
-                    header: {
-                        text: 'Alert',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                        padding: {
-                            top: 15,
-                            left: 15,
-                            right: 15,
-                            bottom: 15,
-                        },
-                        divider: {
-                            color: 'rgba(0,0,0,0.2)',
-                            width: 2,
-                        },
-                    },
-                    body: {
-                        text: 'New Event Created',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
-                },
-                end: {
-                    x: 700,
-                    y: 72,
-                    isDraggable: true,
-                    isConnectable: true,
-                    canConnect: true,
-                    background: {
-                        color: 'rgb(255,0,0)',
-                    },
-                    border: {
-                        radius: 20,
-                        padding: {
-                            top: 50,
-                            right: 50,
-                            bottom: 50,
-                            left: 50,
-                        },
-                        normal: {
-                            width: 2,
-                            color: 'transparent',
-                        },
-                        selected: {
-                            width: 2,
-                            color: 'black',
-                        },
-                        hover: {
-                            width: 2,
-                            color: 'black',
-                        },
-                    },
-                    body: {
-                        text: 'End',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                    },
-                },
-            }
+        const flow = new futureFlow.Flow({
+            options,
+            data,
+        })
+        console.log(flow)
+        console.log(flow.data)
 
-            const flow = new futureFlow.Flow({
-                options,
-                data,
-            })
-            console.log(flow)
-            console.log(flow.data)
-
-            data = {
-                start: {
-                    x: 50,
-                    y: 169,
-                    isDraggable: false,
-                    connections: ['stage1'],
-                    background: {
-                        color: '#12e445',
+        data = {
+            start: {
+                x: 50,
+                y: 169,
+                isDraggable: false,
+                connections: ['stage1'],
+                background: {
+                    color: '#12e445',
+                },
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
                     },
-                    border: {
-                        radius: 20,
-                        padding: {
-                            top: 50,
-                            right: 50,
-                            bottom: 50,
-                            left: 50,
-                        },
-                        normal: {
-                            width: 2,
-                            color: 'transparent',
-                        },
-                        selected: {
-                            width: 4,
-                            color: '#479933',
-                        },
-                        hover: {
-                            width: 4,
-                            color: '#479933',
-                        },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
                     },
-                    body: {
-                        text: 'Start',
-                        alignment: 'start',
-                        divider: {
-                            width: 1,
-                            color: 'rgb(0,0,0)',
-                        },
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
+                    selected: {
+                        width: 4,
+                        color: '#479933',
+                    },
+                    hover: {
+                        width: 4,
+                        color: '#479933',
                     },
                 },
-                stage1: {
-                    x: 500,
-                    y: 145,
-                    isDraggable: true,
-                    connections: ['stage2'],
-                    border: {
-                        radius: 20,
-                        normal: {
-                            width: 4,
-                            color: 'rgba(0,0,0,0.2)',
-                        },
-                        selected: {
-                            width: 4,
-                            color: '#1480d6',
-                        },
-                        hover: {
-                            width: 4,
-                            color: '#1480d6',
-                        },
+                body: {
+                    text: 'Start',
+                    alignment: 'start',
+                    divider: {
+                        width: 1,
+                        color: 'rgb(0,0,0)',
                     },
-                    header: {
-                        text: 'Alert',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                        padding: {
-                            top: 15,
-                            left: 15,
-                            right: 15,
-                            bottom: 15,
-                        },
-                        divider: {
-                            color: 'rgba(0,0,0,0.2)',
-                            width: 2,
-                        },
-                    },
-                    body: {
-                        text: 'New Event Created',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
                     },
                 },
-                stage2: {
-                    x: 500,
-                    y: 350,
-                    isDraggable: true,
-                    connections: ['end'],
-                    border: {
-                        radius: 20,
-                        normal: {
-                            width: 5,
-                            color: 'rgba(0,0,0,0.2)',
-                        },
-                        selected: {
-                            width: 4,
-                            color: '#1480d6',
-                        },
-                        hover: {
-                            width: 4,
-                            color: '#1480d6',
-                        },
+            },
+            stage1: {
+                x: 500,
+                y: 145,
+                isDraggable: true,
+                connections: ['stage2'],
+                border: {
+                    radius: 20,
+                    normal: {
+                        width: 4,
+                        color: 'rgba(0,0,0,0.2)',
                     },
-                    header: {
-                        text: 'Alert',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
-                        padding: {
-                            top: 15,
-                            left: 15,
-                            right: 15,
-                            bottom: 15,
-                        },
-                        divider: {
-                            color: 'rgba(0,0,0,0.2)',
-                            width: 2,
-                        },
+                    selected: {
+                        width: 4,
+                        color: '#1480d6',
                     },
-                    body: {
-                        text: 'New Event Created',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
+                    hover: {
+                        width: 4,
+                        color: '#1480d6',
                     },
                 },
-                end: {
-                    x: 50,
-                    y: 374,
-                    isDraggable: true,
-                    isConnectable: true,
-                    canConnect: true,
-                    background: {
-                        color: 'rgb(255,0,0)',
+                header: {
+                    text: 'Alert',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
                     },
-                    border: {
-                        radius: 20,
-                        padding: {
-                            top: 50,
-                            right: 50,
-                            bottom: 50,
-                            left: 50,
-                        },
-                        normal: {
-                            width: 2,
-                            color: 'transparent',
-                        },
-                        selected: {
-                            width: 4,
-                            color: '#c12a0e',
-                        },
-                        hover: {
-                            width: 4,
-                            color: '#c12a0e',
-                        },
+                    padding: {
+                        top: 15,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
                     },
-                    body: {
-                        text: 'End',
-                        alignment: 'start',
-                        font: {
-                            family: 'Arial',
-                            style: 'normal',
-                            variant: 'normal',
-                            color: 'rgba(0,0,0,0.6)',
-                            size: 20,
-                            weight: 'bold',
-                        },
+                    divider: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 2,
                     },
                 },
-            }
+                body: {
+                    text: 'New Event Created',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            stage2: {
+                x: 500,
+                y: 350,
+                isDraggable: true,
+                connections: ['end'],
+                border: {
+                    radius: 20,
+                    normal: {
+                        width: 5,
+                        color: 'rgba(0,0,0,0.2)',
+                    },
+                    selected: {
+                        width: 4,
+                        color: '#1480d6',
+                    },
+                    hover: {
+                        width: 4,
+                        color: '#1480d6',
+                    },
+                },
+                header: {
+                    text: 'Alert',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                    padding: {
+                        top: 15,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                    },
+                    divider: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 2,
+                    },
+                },
+                body: {
+                    text: 'New Event Created',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            end: {
+                x: 50,
+                y: 374,
+                isDraggable: true,
+                isConnectable: true,
+                canConnect: true,
+                background: {
+                    color: 'rgb(255,0,0)',
+                },
+                border: {
+                    radius: 20,
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                    normal: {
+                        width: 2,
+                        color: 'transparent',
+                    },
+                    selected: {
+                        width: 4,
+                        color: '#c12a0e',
+                    },
+                    hover: {
+                        width: 4,
+                        color: '#c12a0e',
+                    },
+                },
+                body: {
+                    text: 'End',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgba(0,0,0,0.6)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+        }
 
-            flow.data = data
+        flow.data = data
 
-            console.log(flow.entities)
 
-            const canvas = document.getElementById('canvas')
-            canvas.addEventListener('mouseenterentity', event => {
-                console.log(event.detail)
-                document.getElementById('mouseenterentity').innerText =
-                    event.detail._id
-            })
+        flow.on('mouseenterentity', event => {
+            console.log(event.detail)
+            document.getElementById('mouseenterentity').innerText =
+                event.detail._id
+            //document.getElementById('entity').innerHTML = event.detail.toJson;
+        })
 
-            canvas.addEventListener('mouseleaveentity', event => {
-                console.log(event.detail)
-                document.getElementById('mouseleaveentity').innerText =
-                    event.detail._id
-            })
-        </script>
-    </body>
+        flow.on('mouseleaveentity', event => {
+            console.log(event.detail)
+            document.getElementById('mouseleaveentity').innerText =
+                event.detail._id
+            //document.getElementById('entity').innerHTML = event.detail.toJson;
+        })
+
+        flow.on('clickentity', event => {
+            console.log(event.detail)
+            document.getElementById('entity').innerHTML = event.detail.toString;
+        })
+
+        flow.on('dbtouch', e => {
+            alert('double touch');
+            document.getElementById('mouseleaveentity').innerText =
+                event.detail._id
+
+            document.getElementById('entity').innerHTML = event.detail.toJson;
+        })
+
+        flow.on('touchstartentity', e => {
+            console.log('touchstartentity');
+            document.getElementById('touchstartentity').innerText =
+                event.detail._id
+            document.getElementById('entity').innerHTML = event.detail.toJson;
+        })
+
+        flow.on('touchendentity', e => {
+            alert('touchendentity');
+            document.getElementById('touchendentity').innerText =
+                event.detail._id
+            document.getElementById('entity').innerHTML = event.detail.toJson;
+        })
+    </script>
+</body>
+
 </html>
