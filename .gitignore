@@ -7,3 +7,4 @@ lib/index.js
 .npmignore
 src/
 .cache/
+dist/index.html
