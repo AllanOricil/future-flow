@@ -17,7 +17,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
-    <script src="https://unpkg.com/future-flow@0.0.1-38/dist/future-flow.js"></script>
+    <script src="https://unpkg.com/future-flow@0.0.1-39/dist/future-flow.js"></script>
     <style>
         body {
             margin: 0px;
@@ -149,177 +149,36 @@
                 min: 0.2,
             },
             isDebugging: false,
-            drawOrigin: true,
+            drawOrigin: false,
             editor: false,
             canMoveBlocks: true,
             autoArrange: false,
         }
-
         let data = {
-            start: {
-                x: 50,
-                y: 72,
-                isDraggable: false,
-                connections: ['stage1'],
-                background: {
-                    color: '#12e445',
-                },
-                border: {
-                    radius: 20,
-                    padding: {
-                        top: 50,
-                        right: 50,
-                        bottom: 50,
-                        left: 50,
-                    },
-                    normal: {
-                        width: 2,
-                        color: 'transparent',
-                    },
-                    selected: {
-                        width: 2,
-                        color: 'black',
-                    },
-                    hover: {
-                        width: 2,
-                        color: 'black',
-                    },
-                },
-                body: {
-                    text: 'Start',
-                    alignment: 'start',
-                    divider: {
-                        width: 1,
-                        color: 'rgb(0,0,0)',
-                    },
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                },
-            },
-            stage1: {
-                x: 300,
-                y: 45,
-                isDraggable: true,
-                connections: ['end'],
-                border: {
-                    radius: 20,
-                    normal: {
-                        width: 5,
-                        color: 'rgba(0,0,0,0.2)',
-                    },
-                    selected: {
-                        width: 2,
-                        color: 'black',
-                    },
-                    hover: {
-                        width: 2,
-                        color: 'black',
-                    },
-                },
-                header: {
-                    text: 'Alert',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                    padding: {
-                        top: 15,
-                        left: 15,
-                        right: 15,
-                        bottom: 15,
-                    },
-                    divider: {
-                        color: 'rgba(0,0,0,0.2)',
-                        width: 2,
-                    },
-                },
-                body: {
-                    text: 'New Event Created',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                },
-            },
-            end: {
-                x: 700,
-                y: 72,
-                isDraggable: true,
-                isConnectable: true,
-                canConnect: true,
-                background: {
-                    color: 'rgb(255,0,0)',
-                },
-                border: {
-                    radius: 20,
-                    padding: {
-                        top: 50,
-                        right: 50,
-                        bottom: 50,
-                        left: 50,
-                    },
-                    normal: {
-                        width: 2,
-                        color: 'transparent',
-                    },
-                    selected: {
-                        width: 2,
-                        color: 'black',
-                    },
-                    hover: {
-                        width: 2,
-                        color: 'black',
-                    },
-                },
-                body: {
-                    text: 'End',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                },
-            },
-        }
-
-        const flow = new futureFlow.Flow({
-            options,
-            data,
-        })
-        console.log(flow)
-        console.log(flow.data)
-
-        data = {
             start: {
                 x: 146,
                 y: 250,
                 isDraggable: true,
-                connections: ['stage1'],
+                connections: [{
+                    to: 'stage1',
+                    isEditable: false,
+                    line: {
+                        width: 1,
+                        color: 'rgb(212,212,212)',
+                        dashed: [5, 5]
+                    },
+                    connector: {
+                        type: 'triangle',
+                        width: 1,
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)'
+                    }
+                }],
                 background: {
-                    color: '#ea80fc',
+                    color: 'rgb(59, 64, 66)',
                 },
                 border: {
-                    radius: 20,
+                    radius: 10,
                     padding: {
                         top: 50,
                         right: 50,
@@ -350,7 +209,7 @@
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -360,9 +219,22 @@
                 x: 95,
                 y: 360,
                 isDraggable: true,
-                connections: ['stage2'],
+                connections: [{
+                    to: 'stage2',
+                    isEditable: false,
+                    line: {
+                        width: 1,
+                        color: 'rgb(212,212,212)',
+                        dashed: []
+                    },
+                    connector: {
+                        type: 'triangle',
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)'
+                    }
+                }],
                 background: {
-                    color: '#ea80fc',
+                    color: 'rgb(59, 64, 66)',
                 },
                 border: {
                     radius: 20,
@@ -381,12 +253,12 @@
                 },
                 header: {
                     text: 'Build',
-                    alignment: 'start',
+                    alignment: 'center',
                     font: {
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -408,7 +280,7 @@
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -418,9 +290,22 @@
                 x: 131,
                 y: 530,
                 isDraggable: true,
-                connections: ['stage3'],
+                connections: [{
+                    to: 'stage3',
+                    isEditable: false,
+                    line: {
+                        width: 1,
+                        color: 'rgb(212,212,212)',
+                        dashed: []
+                    },
+                    connector: {
+                        type: 'triangle',
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)'
+                    }
+                }],
                 background: {
-                    color: '#ea80fc',
+                    color: 'rgb(59, 64, 66)',
                 },
                 border: {
                     radius: 20,
@@ -439,12 +324,12 @@
                 },
                 header: {
                     text: 'Test',
-                    alignment: 'start',
+                    alignment: 'center',
                     font: {
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -466,19 +351,32 @@
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
                 },
             },
             stage3: {
-                x: 123,
+                x: 131,
                 y: 700,
                 isDraggable: true,
-                connections: ['end'],
+                connections: [{
+                    to: 'end',
+                    isEditable: false,
+                    line: {
+                        width: 1,
+                        color: 'rgb(212,212,212)',
+                        dashed: []
+                    },
+                    connector: {
+                        type: 'triangle',
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)'
+                    }
+                }],
                 background: {
-                    color: '#ea80fc',
+                    color: 'rgb(59, 64, 66)',
                 },
                 border: {
                     radius: 20,
@@ -497,12 +395,12 @@
                 },
                 header: {
                     text: 'Release',
-                    alignment: 'start',
+                    alignment: 'center',
                     font: {
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -524,7 +422,7 @@
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -537,7 +435,7 @@
                 isConnectable: true,
                 canConnect: true,
                 background: {
-                    color: '#ea80fc',
+                    color: 'rgb(59, 64, 66)',
                 },
                 border: {
                     radius: 20,
@@ -567,7 +465,7 @@
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: '#202124',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -575,7 +473,12 @@
             },
         }
 
-        flow.data = data
+        const flow = new futureFlow.Flow({
+            options,
+            data,
+        })
+        console.log(flow)
+        console.log(flow.data)
 
         flow.on('mouseenterentity', event => {
             console.log(event.detail)
