@@ -1,535 +1,724 @@
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Future Flow Demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Future Flow Demo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script>
+        <script src="https://unpkg.com/future-flow@0.0.1-40/dist/future-flow.js"></script>
+        <style>
+            body {
+                margin: 0px;
+                overflow: hidden;
+                background-color: #202124;
+            }
 
-    <script src="https://unpkg.com/future-flow@0.0.1-39/dist/future-flow.js"></script>
-    <style>
-        body {
-            margin: 0px;
-            overflow: hidden;
-            background-color: #202124;
-        }
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            pre::-webkit-scrollbar {
+                display: none;
+            }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        pre::-webkit-scrollbar {
-            display: none;
-        }
+            /* Hide scrollbar for IE and Edge */
+            pre {
+                -ms-overflow-style: none;
+            }
 
-        /* Hide scrollbar for IE and Edge */
-        pre {
-            -ms-overflow-style: none;
-        }
+            p {
+                margin-top: 10px;
+                padding-left: 15px;
+                margin-bottom: 0px;
+                color: white;
+            }
 
-        p {
-            margin-top: 10px;
-            padding-left: 15px;
-            margin-bottom: 0px;
-            color: white;
-        }
+            li {
+                font-size: 12px;
+                color: white;
+            }
 
-        li {
-            font-size: 12px;
-            color: white;
-        }
+            pre {
+                color: white;
+                transition: width 0.2s linear;
+            }
 
-        pre {
-            color: white;
-            transition: width 0.2s linear;
-        }
+            .string {
+                color: rgb(206, 145, 120);
+            }
 
-        .string {
-            color: rgb(206, 145, 120);
-        }
+            .number {
+                color: rgb(181, 206, 168);
+            }
 
-        .number {
-            color: rgb(181, 206, 168);
-        }
+            .boolean {
+                color: rgb(86, 156, 214);
+            }
 
-        .boolean {
-            color: rgb(86, 156, 214);
-        }
+            .null {
+                color: rgb(197, 134, 192);
+            }
 
-        .null {
-            color: rgb(197, 134, 192);
-        }
+            .key {
+                color: rgb(156, 220, 254);
+            }
+        </style>
+    </head>
 
-        .key {
-            color: rgb(156, 220, 254);
-        }
-    </style>
-</head>
+    <body>
+        <div class="d-flex flex-column flex-md-row" style="height: 100%">
+            <div class="d-flex flex-column w-100 h-100">
+                <div
+                    class="d-flex"
+                    style="position:absolute; overflow: hidden;"
+                >
+                    <div>
+                        <p>Instructions</p>
+                        <ul>
+                            <li>
+                                Double click/touch anywhere to place a block.
+                            </li>
+                            <li>
+                                To move a block just click above it, hold your
+                                click, and move the mouse around.
+                            </li>
+                            <li>
+                                Click/touch anywhere in the canvas to move its
+                                position (Pan).
+                            </li>
+                            <li>Scroll Up or Down to Zoom In or Out.</li>
+                            <li>
+                                Click on a block, and then click on another to
+                                create a Connection. If you clicked outside, you
+                                deselected all the blocks.
+                            </li>
+                        </ul>
+                        <p>Dom Events:</p>
+                        <ul>
+                            <li>
+                                Mouse Enter Entity:
+                                <span id="mouseenterentity"></span>
+                            </li>
+                            <li>
+                                Mouse Leave Entity:
+                                <span id="mouseleaveentity"></span>
+                            </li>
+                            <li>
+                                Mouse Click Entity:
+                                <span id="mouseclickentity"></span>
+                            </li>
+                            <li>
+                                Touch Start Entity:
+                                <span id="touchstartentity"></span>
+                            </li>
+                            <li>
+                                Touch End Entity:
+                                <span id="touchendentity"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-<body>
-    <div class="d-flex flex-column flex-md-row" style="height: 100%">
-        <div class="d-flex flex-column w-100 h-100">
-            <div class="d-flex" style="position:absolute; overflow: hidden;">
-                <div>
-                    <p>Instructions</p>
-                    <ul>
-                        <li>
-                            Double click/touch anywhere to place a block.
-                        </li>
-                        <li>
-                            To move a block just click above it, hold your
-                            click, and move the mouse around.
-                        </li>
-                        <li>
-                            Click/touch anywhere in the canvas to move its
-                            position (Pan).
-                        </li>
-                        <li>Scroll Up or Down to Zoom In or Out.</li>
-                        <li>
-                            Click on a block, and then click on another to
-                            create a Connection. If you clicked outside, you
-                            deselected all the blocks.
-                        </li>
-
-                    </ul>
-                    <p>Dom Events:</p>
-                    <ul>
-                        <li>
-                            Mouse Enter Entity:
-                            <span id="mouseenterentity"></span>
-                        </li>
-                        <li>
-                            Mouse Leave Entity:
-                            <span id="mouseleaveentity"></span>
-                        </li>
-                        <li>
-                            Mouse Click Entity:
-                            <span id="mouseclickentity"></span>
-                        </li>
-                        <li>
-                            Touch Start Entity:
-                            <span id="touchstartentity"></span>
-                        </li>
-                        <li>
-                            Touch End Entity:
-                            <span id="touchendentity"></span>
-                        </li>
-                    </ul>
+                <div class="d-flex flex-grow-1 h-100">
+                    <canvas id="canvas"></canvas>
                 </div>
             </div>
 
-            <div class="d-flex flex-grow-1 h-100">
-                <canvas id="canvas"></canvas>
+            <div class="d-flex flex-colum">
+                <pre
+                    id="entitydata"
+                    style="width: 0px !important; position: relative; right: 50%"
+                ></pre>
             </div>
         </div>
 
-        <div class="d-flex flex-colum">
-            <pre id="entitydata" style="width: 0px !important; position: relative; right: 700px"></pre>
-        </div>
-
-    </div>
-
-    <script type="text/javascript">
-        const options = {
-            background: {
-                color: '#202124',
-            },
-            fps: 60,
-            zoom: {
-                level: 1,
-                max: 2,
-                min: 0.2,
-            },
-            isDebugging: false,
-            drawOrigin: false,
-            editor: false,
-            canMoveBlocks: true,
-            autoArrange: false,
-        }
-        let data = {
-            start: {
-                x: 146,
-                y: 250,
-                isDraggable: true,
-                connections: [{
-                    to: 'stage1',
-                    isEditable: false,
-                    line: {
-                        width: 1,
-                        color: 'rgb(212,212,212)',
-                        dashed: [5, 5]
-                    },
-                    connector: {
-                        type: 'triangle',
-                        width: 1,
-                        color: 'rgb(212,212,212)',
-                        fillColor: 'rgb(212,212,212)'
-                    }
-                }],
+        <script type="text/javascript">
+            const options = {
                 background: {
-                    color: 'rgb(59, 64, 66)',
+                    color: '#202124',
                 },
-                border: {
-                    radius: 10,
-                    padding: {
-                        top: 50,
-                        right: 50,
-                        bottom: 50,
-                        left: 50,
-                    },
-                    normal: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    selected: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    hover: {
-                        width: 1,
-                        color: 'transparent',
-                    },
+                fps: 60,
+                zoom: {
+                    level: 1,
+                    max: 2,
+                    min: 0.2,
                 },
-                body: {
-                    text: 'Start',
-                    alignment: 'start',
-                    divider: {
-                        width: 1,
-                        color: 'rgb(0,0,0)',
+                drawOrigin: true,
+                drawGrid: true,
+                editor: false,
+                canMoveBlocks: true,
+                autoArrange: false,
+            }
+            let data = {
+                start: {
+                    x: 370,
+                    y: 300,
+                    isDraggable: true,
+                    states: ['start', 'completed'],
+                    connections: [
+                        {
+                            to: 'stage1',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                particleDistance: 20,
+                                fillColor: 'rgb(247, 129, 244)',
+                            },
+                        },
+                        {
+                            to: 'stage1.1',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                fillColor: 'rgb(247, 129, 244)',
+                                particleDistance: 20,
+                            },
+                        },
+                    ],
+                    background: {
+                        color: 'rgb(59, 64, 66)',
                     },
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
+                    border: {
+                        radius: 10,
+                        padding: {
+                            top: 50,
+                            right: 50,
+                            bottom: 50,
+                            left: 50,
+                        },
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
                     },
-                },
-            },
-            stage1: {
-                x: 95,
-                y: 360,
-                isDraggable: true,
-                connections: [{
-                    to: 'stage2',
-                    isEditable: false,
-                    line: {
-                        width: 1,
-                        color: 'rgb(212,212,212)',
-                        dashed: []
-                    },
-                    connector: {
-                        type: 'triangle',
-                        color: 'rgb(212,212,212)',
-                        fillColor: 'rgb(212,212,212)'
-                    }
-                }],
-                background: {
-                    color: 'rgb(59, 64, 66)',
-                },
-                border: {
-                    radius: 20,
-                    normal: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    selected: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    hover: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                },
-                header: {
-                    text: 'Build',
-                    alignment: 'center',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                    padding: {
-                        top: 15,
-                        left: 15,
-                        right: 15,
-                        bottom: 15,
-                    },
-                    divider: {
-                        color: 'transparent',
-                        width: 1,
-                    },
-                },
-                body: {
-                    text: 'Checking Out...',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
+                    body: {
+                        text: 'Start',
+                        alignment: 'start',
+                        divider: {
+                            width: 1,
+                            color: 'rgb(0,0,0)',
+                        },
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
                     },
                 },
-            },
-            stage2: {
-                x: 131,
-                y: 530,
-                isDraggable: true,
-                connections: [{
-                    to: 'stage3',
-                    isEditable: false,
-                    line: {
-                        width: 1,
-                        color: 'rgb(212,212,212)',
-                        dashed: []
+                stage1: {
+                    x: 207,
+                    y: 434,
+                    states: ['start'],
+                    isDraggable: true,
+                    connections: [
+                        {
+                            to: 'stage2',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                fillColor: 'rgb(247, 129, 244)',
+                                particleDistance: 20,
+                            },
+                        },
+                    ],
+                    background: {
+                        color: 'rgb(59, 64, 66)',
                     },
-                    connector: {
-                        type: 'triangle',
-                        color: 'rgb(212,212,212)',
-                        fillColor: 'rgb(212,212,212)'
-                    }
-                }],
-                background: {
-                    color: 'rgb(59, 64, 66)',
-                },
-                border: {
-                    radius: 20,
-                    normal: {
-                        width: 1,
-                        color: 'transparent',
+                    border: {
+                        radius: 20,
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
                     },
-                    selected: {
-                        width: 1,
-                        color: 'transparent',
+                    header: {
+                        text: 'Build',
+                        alignment: 'center',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                            bottom: 15,
+                        },
+                        divider: {
+                            color: 'transparent',
+                            width: 1,
+                        },
                     },
-                    hover: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                },
-                header: {
-                    text: 'Test',
-                    alignment: 'center',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                    padding: {
-                        top: 15,
-                        left: 15,
-                        right: 15,
-                        bottom: 15,
-                    },
-                    divider: {
-                        color: 'transparent',
-                        width: 1,
-                    },
-                },
-                body: {
-                    text: 'Queued',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                },
-            },
-            stage3: {
-                x: 131,
-                y: 700,
-                isDraggable: true,
-                connections: [{
-                    to: 'end',
-                    isEditable: false,
-                    line: {
-                        width: 1,
-                        color: 'rgb(212,212,212)',
-                        dashed: []
-                    },
-                    connector: {
-                        type: 'triangle',
-                        color: 'rgb(212,212,212)',
-                        fillColor: 'rgb(212,212,212)'
-                    }
-                }],
-                background: {
-                    color: 'rgb(59, 64, 66)',
-                },
-                border: {
-                    radius: 20,
-                    normal: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    selected: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    hover: {
-                        width: 1,
-                        color: 'transparent',
+                    body: {
+                        text: 'Checking Out...',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
                     },
                 },
-                header: {
-                    text: 'Release',
-                    alignment: 'center',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
+                'stage1.1': {
+                    x: 548,
+                    y: 434,
+                    isDraggable: true,
+                    states: ['start'],
+                    connections: [
+                        {
+                            to: 'stage2',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                fillColor: 'rgb(247, 129, 244)',
+                                particleDistance: 20,
+                            },
+                        },
+                    ],
+                    background: {
+                        color: 'rgb(59, 64, 66)',
                     },
-                    padding: {
-                        top: 15,
-                        left: 15,
-                        right: 15,
-                        bottom: 15,
+                    border: {
+                        radius: 20,
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
                     },
-                    divider: {
-                        color: 'transparent',
-                        width: 1,
+                    header: {
+                        text: 'Test',
+                        alignment: 'center',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                            bottom: 15,
+                        },
+                        divider: {
+                            color: 'transparent',
+                            width: 1,
+                        },
+                    },
+                    body: {
+                        text: 'Queued',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
                     },
                 },
-                body: {
-                    text: 'Queued',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
+                stage2: {
+                    x: 350,
+                    y: 660,
+                    isDraggable: true,
+                    states: ['start'],
+                    connections: [
+                        {
+                            to: 'stage3',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                fillColor: 'rgb(247, 129, 244)',
+                                particleDistance: 20,
+                            },
+                        },
+                    ],
+                    background: {
+                        color: 'rgb(59, 64, 66)',
+                    },
+                    border: {
+                        radius: 20,
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                    },
+                    header: {
+                        text: 'Test',
+                        alignment: 'center',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                            bottom: 15,
+                        },
+                        divider: {
+                            color: 'transparent',
+                            width: 1,
+                        },
+                    },
+                    body: {
+                        text: 'Queued',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
                     },
                 },
-            },
-            end: {
-                x: 150,
-                y: 850,
-                isDraggable: true,
-                isConnectable: true,
-                canConnect: true,
-                background: {
-                    color: 'rgb(59, 64, 66)',
+                stage3: {
+                    x: 298,
+                    y: 893,
+                    isDraggable: true,
+                    states: ['start'],
+                    connections: [
+                        {
+                            to: 'end',
+                            isEditable: false,
+                            line: {
+                                width: 1,
+                                color: 'rgb(212,212,212)',
+                                dashed: [5, 5],
+                            },
+                            connector: {
+                                type: 'triangle',
+                                color: 'rgb(212,212,212)',
+                                fillColor: 'rgb(212,212,212)',
+                            },
+                            animation: {
+                                speed: 5,
+                                type: 'circle',
+                                fillColor: 'rgb(247, 129, 244)',
+                                particleDistance: 20,
+                            },
+                        },
+                    ],
+                    background: {
+                        color: 'rgb(59, 64, 66)',
+                    },
+                    border: {
+                        radius: 20,
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                    },
+                    header: {
+                        text: 'Release',
+                        alignment: 'center',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                            bottom: 15,
+                        },
+                        divider: {
+                            color: 'transparent',
+                            width: 1,
+                        },
+                    },
+                    body: {
+                        text: 'Queued',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
+                    },
                 },
-                border: {
-                    radius: 20,
-                    padding: {
-                        top: 50,
-                        right: 50,
-                        bottom: 50,
-                        left: 50,
+                end: {
+                    x: 604,
+                    y: 869,
+                    isDraggable: true,
+                    isConnectable: true,
+                    canConnect: true,
+                    background: {
+                        color: 'rgb(59, 64, 66)',
                     },
-                    normal: {
-                        width: 1,
-                        color: 'transparent',
+                    border: {
+                        radius: 20,
+                        padding: {
+                            top: 50,
+                            right: 50,
+                            bottom: 50,
+                            left: 50,
+                        },
+                        normal: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        selected: {
+                            width: 1,
+                            color: 'transparent',
+                        },
+                        hover: {
+                            width: 1,
+                            color: 'transparent',
+                        },
                     },
-                    selected: {
-                        width: 1,
-                        color: 'transparent',
-                    },
-                    hover: {
-                        width: 1,
-                        color: 'transparent',
+                    body: {
+                        text: 'End',
+                        alignment: 'start',
+                        font: {
+                            family: 'Arial',
+                            style: 'normal',
+                            variant: 'normal',
+                            color: 'rgb(212,212,212)',
+                            size: 20,
+                            weight: 'bold',
+                        },
                     },
                 },
-                body: {
-                    text: 'End',
-                    alignment: 'start',
-                    font: {
-                        family: 'Arial',
-                        style: 'normal',
-                        variant: 'normal',
-                        color: 'rgb(212,212,212)',
-                        size: 20,
-                        weight: 'bold',
-                    },
-                },
-            },
-        }
+            }
 
-        const flow = new futureFlow.Flow({
-            options,
-            data,
-        })
-        console.log(flow)
-        console.log(flow.data)
+            const flow = new futureFlow.Flow({
+                options,
+                data,
+            })
+            console.log(flow)
 
-        flow.on('mouseenterentity', event => {
-            console.log(event.detail)
-            document.getElementById('mouseenterentity').innerText =
-                event.detail._id
-            document.getElementById('entitydata').innerHTML =
-                event.detail.toString
-            document.getElementById('entitydata').style.width = '700px';
-            //document.getElementById('entitydata').innerHTML = event.detail.toJson;
-        })
+            flow.on('mouseenterentity', event => {
+                //console.log(event.detail)
+                document.getElementById('mouseenterentity').innerText =
+                    event.detail._id
+                document.getElementById(
+                    'entitydata'
+                ).innerHTML = event.detail.preetier()
+                document.getElementById('entitydata').style.width = '700px'
+                //document.getElementById('entitydata').innerHTML = event.detail.toJson;
+            })
 
-        flow.on('mouseleaveentity', event => {
-            console.log(event.detail)
-            document.getElementById('mouseleaveentity').innerText =
-                event.detail._id
-            //document.getElementById('entitydata').innerHTML = event.detail.toJson;
-        })
+            flow.on('mouseleaveentity', event => {
+                //console.log(event.detail)
+                document.getElementById('mouseleaveentity').innerText =
+                    event.detail._id
+                //document.getElementById('entitydata').innerHTML = event.detail.toJson;
+            })
 
-        flow.on('clickentity', event => {
-            console.log(event.detail)
-            document.getElementById('entitydata').innerHTML =
-                event.detail.toString
-            document.getElementById('mouseclickentity').innerText =
-                event.detail._id
-        })
+            flow.on('clickentity', event => {
+                document.getElementById('entitydata').innerHTML =
+                    event.detail.toString
+                document.getElementById('mouseclickentity').innerText =
+                    event.detail._id
+            })
 
-        flow.on('dbtouch', e => {
-            alert('double touch')
-            document.getElementById('mouseleaveentity').innerText =
-                event.detail._id
+            flow.on('dbtouch', e => {
+                document.getElementById('mouseleaveentity').innerText =
+                    event.detail._id
 
-            document.getElementById('entitydata').innerHTML =
-                event.detail.toJson
-        })
+                document.getElementById('entitydata').innerHTML =
+                    event.detail.toJson
+            })
 
-        flow.on('touchstartentity', e => {
-            console.log('touchstartentity')
-            document.getElementById('touchstartentity').innerText =
-                event.detail._id
-            document.getElementById('entitydata').innerHTML =
-                event.detail.toJson
-        })
+            flow.on('touchstartentity', e => {
+                console.log('touchstartentity')
+                document.getElementById('touchstartentity').innerText =
+                    event.detail._id
+                document.getElementById('entitydata').innerHTML =
+                    event.detail.toJson
+            })
 
-        flow.on('touchendentity', e => {
-            alert('touchendentity')
-            document.getElementById('touchendentity').innerText =
-                event.detail._id
-            document.getElementById('entitydata').innerHTML =
-                event.detail.toJson
-        })
-    </script>
-</body>
+            flow.on('touchendentity', e => {
+                alert('touchendentity')
+                document.getElementById('touchendentity').innerText =
+                    event.detail._id
+                document.getElementById('entitydata').innerHTML =
+                    event.detail.toJson
+            })
 
+            //Changing the block status will dispatch an Event that can be hooked with a Callback
+            setTimeout(() => {
+                flow.getEntityByName('start').state = 'start'
+            }, 3000)
+
+            setTimeout(() => {
+                flow.getEntityByName('stage1').state = 'start'
+            }, 6000)
+
+            setTimeout(() => {
+                flow.getEntityByName('stage1.1').state = 'start'
+            }, 6000)
+
+            setTimeout(() => {
+                flow.getEntityByName('stage2').state = 'start'
+            }, 12000)
+
+            setTimeout(() => {
+                flow.getEntityByName('stage3').state = 'start'
+            }, 18000)
+
+            //Block Status Event Callback
+            flow.getEntityByName('start').on('start', e => {
+                flow.getEntityByName('start').startAllAnimations()
+            })
+
+            flow.getEntityByName('stage1').on('start', e => {
+                flow.getEntityByName('stage1').startAllAnimations()
+            })
+
+            flow.getEntityByName('stage1.1').on('start', e => {
+                flow.getEntityByName('stage1.1').startAllAnimations()
+            })
+
+            flow.getEntityByName('stage2').on('start', e => {
+                flow.getEntityByName('stage2').startAllAnimations()
+            })
+
+            flow.getEntityByName('stage3').on('start', e => {
+                flow.getEntityByName('stage3').startAllAnimations()
+            })
+        </script>
+    </body>
 </html>

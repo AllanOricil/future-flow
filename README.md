@@ -228,7 +228,7 @@ Then in your Component
 Add a script tag poiting to npm CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.1-39/lib/index.min.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.1-40/lib/index.min.js"></script>
 ```
 
 Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
@@ -236,7 +236,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.1-39/lib/index.min.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.1-40/lib/index.min.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
