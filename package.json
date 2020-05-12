@@ -1,6 +1,6 @@
 {
     "name": "future-flow",
-    "version": "0.0.1-41",
+    "version": "0.0.1-42",
     "description": "Flow diagram creator with HTML5 Canvas",
     "main": "/dist/future-flow.js",
     "module": "/dist/future-flow.js",
