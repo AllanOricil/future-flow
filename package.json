@@ -1,6 +1,6 @@
 {
     "name": "future-flow",
-    "version": "0.0.1-43",
+    "version": "0.0.1-44",
     "description": "Flow diagram creator with HTML5 Canvas",
     "main": "/dist/future-flow.js",
     "module": "/dist/future-flow.js",
@@ -23,13 +23,15 @@
         "flow",
         "flow generator",
         "flow builder",
-        "flochart",
+        "flow chart",
         "flow diagram",
         "diagram",
         "javascript",
         "canvas",
+        "HTML 5",
         "Nuxtjs",
-        "Vuejs"
+        "Vuejs",
+        "Salesforce"
     ],
     "devDependencies": {
         "babel-cli": "^6.26.0",
