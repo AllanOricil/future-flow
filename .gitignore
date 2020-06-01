@@ -2,10 +2,8 @@ node_modules
 .vscode
 /bell.svg
 /index.html
-index.js
 lib/index.js
 .npmignore
-src/
 .cache/
 dist/index.html
 chromedriver.log

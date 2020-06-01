@@ -1,0 +1,57 @@
+import Color from './color.js';
+import {
+    getTextHeight
+} from '../utils/font.js';
+export default class Font {
+    constructor({
+        family,
+        style,
+        variant,
+        color,
+        size,
+        weight
+    }) {
+        this._family = family;
+        this._style = style;
+        this._variant = variant;
+        this._color = new Color(color);
+        this._size = size;
+        this._weight = weight;
+    }
+
+    get font2Canvas() {
+        return `${this._style} ${this._variant} ${this._weight} ${this._size}px ${this._family}`;
+    }
+
+    get family() {
+        return this._family;
+    }
+
+    get style() {
+        return this._style;
+    }
+
+    get variant() {
+        return this._variant;
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    get size() {
+        return this._size;
+    }
+
+    get weight() {
+        return this._weight;
+    }
+
+    get dimensions() {
+        return getTextHeight({
+            fontFamily: this._family,
+            fontSize: this._size,
+            fontWeight: this._weight,
+        });
+    }
+}

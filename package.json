@@ -1,6 +1,6 @@
 {
     "name": "future-flow",
-    "version": "0.0.3",
+    "version": "0.0.8",
     "description": "Flow diagram creator with HTML5 Canvas",
     "main": "/dist/future-flow.js",
     "module": "/dist/future-flow.js",
@@ -11,8 +11,7 @@
         "uglify": "uglifyjs dist/index.js -o dist/index.min.js -c -m",
         "build": "npx webpack --config webpack.config.js",
         "start": "npx webpack --watch --config webpack.dev.config.js",
-        "prepublish": "node buildscripts/beforepublish.js && npm run build",
-        "postpublish": "git add * && git commit -m \"new version\" && git push origin master"
+        "prepublish": "node .scripts/prepublish.js && npm run build"
     },
     "repository": {
         "type": "git",

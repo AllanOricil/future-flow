@@ -1,6 +1,5 @@
-![](https://badgen.net/npm/v/future-flow)
+<a href="https://www.npmjs.com/package/future-flow"><img src="https://badge.fury.io/js/future-flow.svg" alt="npm version" height="18"></a>
 ![](https://badgen.net/npm/dt/future-flow)
-![](https://badgen.net/npm/dependents/future-flow)
 ![](https://badgen.net/bundlephobia/min/future-flow)
 
 <a href="https://www.buymeacoffee.com/allanoricil" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
@@ -17,30 +16,24 @@ This project aims to ease the creation of Animated Flow Diagrams using HTML5 Can
 -   [Features](#features)
 -   [Supported Browsers](#supported-browsers)
 -   How to Use
-    -   [Nuxtjs](#nuxtjs)
+    -   [Vue Js](#vue-js)
     -   [Salesforce](#salesforce)
     -   [Browser](#browser)
 -   [Schema](#schema)
 
 # Features
 
+-   [x] Fully customizable using only Objects.
 -   [x] Zoom and Pan
--   [x] Customize Entities using properties.
 -   [x] Mobile Ready.
--   [x] Customize Connections.
 -   [x] Export and Import Flows as JSON.
--   [x] Flow Animations
--   [ ] Export Flow as Image
--   [ ] Allow creation of personalized Blocks
+-   [x] Flow Animations.
+-   [ ] Organize Flows using Layers.
+-   [ ] Flows of Flows.
+-   [ ] Export Flow as Image.
+-   [ ] Export Flow as GIF.
 
-# Supported Browsers
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/samsung-internet/samsung-internet_48x48.png" alt="Samsung" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Samsung | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Opera |
-| --------- | --------- | --------- | --------- | --------- | --------- | --------- |
-| IE11, Edge| last 10 versions| last 2 versions| last 2 versions| last 7 versions| last version| last version
-
-
-## Nuxtjs
+## Vue Js
 
 First, install the package with npm
 
@@ -236,7 +229,7 @@ Then in your Component
 
 ## Salesforce
 
-Download the library from the [CDN](https://unpkg.com/future-flow@0.0.3/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
+Download the library from the [CDN](https://unpkg.com/future-flow@0.0.8/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
 
 ![](images/salesforce_staticresource.JPG)
 
@@ -816,7 +809,7 @@ export default class Futureflow extends LightningElement {
 Add a script tag poiting to npm CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.3/dist/future-flow.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.8/dist/future-flow.js"></script>
 ```
 
 Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
@@ -824,7 +817,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.3/dist/future-flow.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.8/dist/future-flow.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
