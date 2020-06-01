@@ -23,8 +23,8 @@ export default class Diamond extends Shape {
         ctx.save();
         super.draw(ctx);
         this.rotateFromPosition(ctx, {
-            x: this._position.x + this._dimension.width / 2,
-            y: this._position.y + this._dimension.height / 2
+            x: this._transform.position.x + this._transform.dimension.width / 2,
+            y: this._transform.position.y + this._transform.dimension.height / 2
         });
         this._path = new Path2D();
         ctx.beginPath();

@@ -4,6 +4,7 @@ import Dimension from '../transforms/dimension.js';
 import Scale from '../transforms/scale.js';
 import Conditional from './conditional.js';
 import Block from './block.js';
+import Transform from '../transforms/transform.js';
 
 export default class Canvas {
 
@@ -43,43 +44,48 @@ export default class Canvas {
         canvas
     }) {
         this._entityManager = new EntityManager();
+        this._dpi = window.devicePixelRatio;
         this._el = canvas || document.getElementById('canvas');
-        this._el.width = this._el.parentElement.clientWidth;
-        this._el.height = this._el.parentElement.clientHeight;
         this._el.style.maxHeight = 'none';
         this._el.focus();
         this._el.style.backgroundColor = options && options.background ? options.background.color : Canvas.BACKGROUND;
-
         this._fps = options && options.fps ? options.fps : Canvas.FPS;
         this._canMoveBlocks = options && options.canMoveBlocks ? options.canMoveBlocks : Canvas.CANMOVEBLOCKS;
         this._canDragCanvas = options && options.canDragCanvas ? options.canDragCanvas : Canvas.CANDRAGCANVAS;
-        this._origin = new Position({
-            x: 0,
-            y: 0
-        });
-        this._dimension = new Dimension({
-            width: this._el.parentElement.clientWidth,
-            height: this._el.parentElement.clientHeight
-        });
         this._mouse = new Position({
             x: 0,
             y: 0
         });
-        this._scale = options && options.zoom ? new Scale({
-            horizontal: options.zoom.level,
-            vertical: options.zoom.level
-        }) : Canvas.SCALE;
         this._scaleLimits = options && options.zoom ? {
             max: options.zoom.max,
             min: options.zoom.min,
         } : Canvas.SCALELIMITS;
 
+        this._transform = new Transform({
+            position: {
+                x: 0,
+                y: 0
+            },
+            dimension: {
+                width: this._el.parentElement.clientWidth,
+                height: this._el.parentElement.clientHeight
+            },
+            scale: {
+                horizontal: options.zoom.level,
+                vertical: options.zoom.level
+            }
+        });
+
+        this._el.width = this._el.parentElement.clientWidth;
+        this._el.height = this._el.parentElement.clientHeight;
+        this._el.setAttribute('width', this._el.parentElement.clientWidth);
+        this._el.setAttribute('height', this._el.parentElement.clientHeight);
 
         if (typeof OffscreenCanvas !== "undefined") {
             if ('OffscreenCanvas' in window) {
                 this._offscreenCanvas = this._el.transferControlToOffscreen();
             } else {
-                this._offscreenCanvas = new OffscreenCanvas(this._dimension.width, this._dimension.height);
+                this._offscreenCanvas = new OffscreenCanvas(this._transform.dimension.width, this._transform.dimension.height);
             }
             this._ctx = this._offscreenCanvas.getContext('2d');
         } else {
@@ -88,12 +94,9 @@ export default class Canvas {
 
         this.setData(data);
 
-        this._intervalId = null;
-        this._time = 0;
-        this._startTime = 0;
-        this._timeToUpdate = 0;
-        this._timeToDraw = 0;
-
+        this._tickTime;
+        this._updateTime;
+        this._drawTime;
 
         let _isCanvasBeingDragged = false;
         let _selectedEntities = [];
@@ -342,10 +345,10 @@ export default class Canvas {
 
                     let deltaX =
                         (this._mouse.x - previousEventPosition.x) *
-                        this._scale.horizontal;
+                        this._transform.scale.horizontal;
                     let deltaY =
                         (this._mouse.y - previousEventPosition.y) *
-                        this._scale.vertical;
+                        this._transform.scale.vertical;
                     this.translate(deltaX, deltaY);
                 } else {
                     if (_entityBeingDragged) {
@@ -454,34 +457,35 @@ export default class Canvas {
         this._el.onpointerout = pointerup_handler;
         this._el.onpointerleave = pointerup_handler;
 
-        window.addEventListener(
-            'resize',
-            () => {
-                if (this._offscreenCanvas) {
-                    this._offscreenCanvas.width = this._el.parentElement.clientWidth;
-                    this._offscreenCanvas.height = this._el.parentElement.clientHeight;
-                } else {
-                    this._el.width = this._el.parentElement.clientWidth;
-                    this._el.height = this._el.parentElement.clientHeight;
-                }
-            },
-            false
-        );
+
+        const resizeClientWindow = e => {
+            this._transform.dimension.width = this._el.parentElement.clientWidth;
+            this._transform.dimension.height = this._el.parentElement.clientHeight;
+            if (this._offscreenCanvas) {
+                this._offscreenCanvas.width = this._transform.dimension.width;
+                this._offscreenCanvas.height = this._transform.dimension.height;
+            } else {
+                this._el.width = this._transform.dimension.width;
+                this._el.height = this._transform.dimension.height;
+            }
+        };
+
+        window.onresize = resizeClientWindow;
 
         this.start();
     }
 
     clearFrame() {
-        this._ctx.clearRect(0, 0, this._el.width, this._el.height);
+        this._ctx.clearRect(0, 0, this._transform.dimension.width, this._transform.dimension.height);
     }
 
     translate(dx, dy) {
-        this._origin.x += dx;
-        this._origin.y += dy;
+        this._transform.position.x += dx;
+        this._transform.position.y += dy;
     }
 
     start() {
-        this._startTime = new Date();
+        this._tickTime = new Date();
         this._intervalId = setInterval(() => {
             this.tick();
         }, 1000 / this._fps);
@@ -492,11 +496,14 @@ export default class Canvas {
     }
 
     tick() {
-        const deltaTime = new Date() - this._timeToDraw;
+        const startTime = new Date();
+        const deltaTime = startTime - this._endTime;
         this.update(deltaTime);
-        this._timeToUpdate = new Date() - this._timePreviousFrame;
+        this._updateTime = new Date() - startTime;
         this.draw();
-        this._timeToDraw = new Date() - this._timeToUpdate;
+        this._endTime = new Date();
+        this._drawTime = this._endTime - this._updateTime;
+        this._tickTime = this._endTime - startTime;
     }
 
     update(deltaTime) {
@@ -508,8 +515,8 @@ export default class Canvas {
     draw() {
         this.clearFrame();
         this._ctx.save();
-        this._ctx.translate(this._origin.x + 0.5, this._origin.y + 0.5);
-        this._ctx.scale(this._scale.horizontal, this._scale.vertical);
+        this._ctx.translate(this._transform.position.x + 0.5, this._transform.position.y + 0.5);
+        this._ctx.scale(this._transform.scale.horizontal, this._transform.scale.vertical);
         this._entityManager.entities.forEach(entity => {
             entity.draw(this._ctx);
         });
@@ -527,8 +534,8 @@ export default class Canvas {
         };
 
         return {
-            x: (e.x - this._origin.x - elementOffset.left) / this._scale.horizontal,
-            y: (e.y - this._origin.y - elementOffset.top) / this._scale.vertical,
+            x: (e.x - this._transform.position.x - elementOffset.left) / this._transform.scale.horizontal,
+            y: (e.y - this._transform.position.y - elementOffset.top) / this._transform.scale.vertical,
         };
     }
 
@@ -608,16 +615,16 @@ export default class Canvas {
     }
 
     set scale(newValue) {
-        const newSh = this._scale.horizontal * newValue.horizontal;
-        const newSv = this._scale.vertical * newValue.vertical;
+        const newSh = this._transform.scale.horizontal * newValue.horizontal;
+        const newSv = this._transform.scale.vertical * newValue.vertical;
         if (
             newSh < this._scaleLimits.max &&
             newSv < this._scaleLimits.max &&
             newSh >= this._scaleLimits.min &&
             newSv >= this._scaleLimits.min
         ) {
-            this._scale.horizontal = newSh;
-            this._scale.vertical = newSv;
+            this._transform.scale.horizontal = newSh;
+            this._transform.scale.vertical = newSv;
         }
     }
 

@@ -100,7 +100,7 @@ export default class Block extends Entity {
 
             let headerTextX = 0;
             if (this.header.alignment === 'center') {
-                headerTextX = this.position.x + (this._dimension.width) / 2;
+                headerTextX = this.position.x + (this.dimension.width) / 2;
             } else {
                 headerTextX = this.position.x + this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + this.header.padding.left;
             }
@@ -113,7 +113,7 @@ export default class Block extends Entity {
                 ctx.lineWidth = this.header.divider.width;
                 ctx.beginPath();
                 ctx.moveTo(this.position.x, this.position.y + headerHeight);
-                ctx.lineTo(this.position.x + this._dimension.width, this.position.y + headerHeight);
+                ctx.lineTo(this.position.x + this.dimension.width, this.position.y + headerHeight);
                 ctx.stroke();
                 ctx.closePath();
                 ctx.restore();
@@ -188,7 +188,7 @@ export default class Block extends Entity {
                 ctx.lineWidth = this.footer.divider.width;
                 ctx.beginPath();
                 ctx.moveTo(this.position.x, this.position.y + headerHeight + bodyHeight);
-                ctx.lineTo(this.position.x + this._dimension.width, this.position.y + headerHeight + bodyHeight);
+                ctx.lineTo(this.position.x + this.dimension.width, this.position.y + headerHeight + bodyHeight);
                 ctx.stroke();
                 ctx.closePath();
                 ctx.restore();

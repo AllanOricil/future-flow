@@ -15,23 +15,24 @@ This project aims to ease the creation of Animated Flow Diagrams using HTML5 Can
 # Summary
 -   [Features](#features)
 -   [Supported Browsers](#supported-browsers)
--   How to Use
+-   [How to Use](#how-to-use)
     -   [Vue Js](#vue-js)
     -   [Salesforce](#salesforce)
-    -   [Browser](#browser)
--   [Schema](#schema)
+    -   [Inline Script](#inline-script)
+-   [Documentation](#documentation)
 
 # Features
 
 -   [x] Fully customizable using only Objects.
 -   [x] Zoom and Pan
--   [x] Mobile Ready.
 -   [x] Export and Import Flows as JSON.
 -   [x] Flow Animations.
 -   [ ] Organize Flows using Layers.
 -   [ ] Flows of Flows.
 -   [ ] Export Flow as Image.
 -   [ ] Export Flow as GIF.
+
+# How to Use
 
 ## Vue Js
 
@@ -229,7 +230,7 @@ Then in your Component
 
 ## Salesforce
 
-Download the library from the [CDN](https://unpkg.com/future-flow@0.0.8/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
+Download the library from the [CDN](https://unpkg.com/future-flow@0.0.9/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
 
 ![](images/salesforce_staticresource.JPG)
 
@@ -804,12 +805,12 @@ export default class Futureflow extends LightningElement {
 ```
 
 
-## Browser
+## Inline Script
 
-Add a script tag poiting to npm CDN
+Import the script from the npm CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.8/dist/future-flow.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.9/dist/future-flow.js"></script>
 ```
 
 Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
@@ -817,7 +818,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.8/dist/future-flow.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.9/dist/future-flow.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
@@ -826,49 +827,96 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
     <script>
         const options = {
             background: {
-                color: 'rgb(255,255,255)',
+                color: '#202124',
             },
-            fps: 60,
             zoom: {
-                level: 1,
+                level: futureFlow.isMobile() ? 0.8 : 1,
                 max: 2,
                 min: 0.2,
             },
-            isDebugging: false,
-            drawOrigin: true,
+            drawOrigin: false,
+            drawGrid: true,
             editor: false,
-            canMoveBlocks: true,
+            canMoveBlocks: false,
+            canDragCanvas: false,
             autoArrange: false,
         }
 
-        const data = {
+        let data = {
             start: {
-                x: 50,
-                y: 72,
-                isDraggable: false,
-                connections: ['stage1'],
+                position: {
+                    x: 216,
+                    y: 31,
+                },
+                isDraggable: true,
+                states: ['start', 'completed'],
+                connections: [{
+                    to: 'condition1',
+                    isEditable: false,
+                    line: {
+                        weight: 1,
+                        color: 'rgb(212,212,212)',
+                        enableBezierCurves: true,
+                        dashed: [5, 5],
+                    },
+                    connector: {
+                        shape: 'triangle',
+                        dimension: {
+                            width: 10,
+                            height: 10
+                        },
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)',
+                    },
+                    animation: {
+                        speed: 5,
+                        type: 'circle',
+                        particleDistance: 20,
+                        fillColor: 'rgb(247, 129, 244)',
+                    },
+                }, ],
                 background: {
-                    color: '#12e445',
+                    color: {
+                        red: 59,
+                        green: 64,
+                        blue: 66,
+                    },
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
                 },
                 border: {
-                    radius: 20,
+                    radius: 10,
                     padding: {
                         top: 50,
                         right: 50,
                         bottom: 50,
                         left: 50,
                     },
-                    normal: {
-                        width: 2,
-                        color: 'transparent',
+                    lineWidth: 1,
+                    color: {
+                        red: 59,
+                        green: 64,
+                        blue: 66,
                     },
                     selected: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: {
+                            red: 59,
+                            green: 64,
+                            blue: 66,
+                        },
                     },
                     hover: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: {
+                            red: 59,
+                            green: 64,
+                            blue: 66,
+                        },
                     },
                 },
                 body: {
@@ -882,40 +930,278 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
                 },
             },
-            stage1: {
-                x: 300,
-                y: 45,
+            condition1: {
+                position: {
+                    x: 164,
+                    y: 176,
+                },
                 isDraggable: true,
-                connections: ['end'],
-                border: {
-                    radius: 20,
-                    normal: {
-                        width: 5,
-                        color: 'rgba(0,0,0,0.2)',
+                type: 'conditional',
+                states: ['start', 'completed'],
+                connections: [{
+                        to: 'yes',
+                        isEditable: false,
+                        line: {
+                            weight: 1,
+                            color: 'rgb(212,212,212)',
+                            enableBezierCurves: true,
+                            dashed: [5, 5],
+                        },
+                        connector: {
+                            shape: 'triangle',
+                            dimension: {
+                                width: 10,
+                                height: 10
+                            },
+                            color: 'rgb(212,212,212)',
+                            fillColor: 'rgb(212,212,212)',
+                        },
+                        animation: {
+                            speed: 5,
+                            type: 'circle',
+                            particleDistance: 20,
+                            fillColor: 'rgb(247, 129, 244)',
+                        },
                     },
+                    {
+                        to: 'no',
+                        isEditable: false,
+                        line: {
+                            weight: 1,
+                            color: 'rgb(212,212,212)',
+                            enableBezierCurves: true,
+                            dashed: [5, 5],
+                        },
+                        connector: {
+                            shape: 'triangle',
+                            dimension: {
+                                width: 10,
+                                height: 10
+                            },
+                            color: 'rgb(212,212,212)',
+                            fillColor: 'rgb(212,212,212)',
+                        },
+                        animation: {
+                            speed: 5,
+                            type: 'circle',
+                            fillColor: 'rgb(247, 129, 244)',
+                            particleDistance: 20,
+                        },
+                    },
+                ],
+                background: {
+                    color: 'rgb(59, 64, 66)',
+                },
+                padding: {
+                    top: 50,
+                    right: 50,
+                    bottom: 50,
+                    left: 50,
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
+                },
+                border: {
+                    radius: 10,
+                    lineWidth: 1,
+                    color: 'rgb(212, 212, 212)',
                     selected: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
                     },
                     hover: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                },
+                body: {
+                    text: 'OS == Win32',
+                    alignment: 'start',
+                    divider: {
+                        width: 1,
+                        color: 'rgb(0,0,0)',
+                    },
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgb(212,212,212)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            yes: {
+                position: {
+                    x: 51,
+                    y: 362,
+                },
+                states: ['stage2'],
+                isDraggable: true,
+                connections: [{
+                    to: 'stage2',
+                    isEditable: false,
+                    line: {
+                        weight: 1,
+                        color: 'rgb(212,212,212)',
+                        enableBezierCurves: true,
+                        dashed: [5, 5],
+                    },
+                    connector: {
+                        shape: 'triangle',
+                        dimension: {
+                            width: 10,
+                            height: 10
+                        },
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)',
+                    },
+                    animation: {
+                        speed: 5,
+                        type: 'circle',
+                        fillColor: 'rgb(247, 129, 244)',
+                        particleDistance: 20,
+                    },
+                }, ],
+                background: {
+                    color: 'rgb(59, 64, 66)',
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
+                },
+                border: {
+                    radius: 20,
+                    lineWidth: 1,
+                    color: 'rgb(212, 212, 212)',
+                    selected: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                    hover: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
                     },
                 },
                 header: {
-                    text: 'Alert',
+                    text: 'Build',
+                    alignment: 'center',
+                    icon: {
+                        src: 'https://imagens.canaltech.com.br/empresas/690.400.jpg',
+                        position: {
+                            x: 0,
+                            y: 0,
+                        },
+                        dimension: {
+                            width: 25,
+                            height: 25,
+                        },
+                    },
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgb(212,212,212)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                    padding: {
+                        top: 15,
+                        left: 0,
+                        right: 15,
+                        bottom: 15,
+                    },
+                    divider: {
+                        color: 'rgb(212, 212, 212)',
+                        width: 1,
+                    },
+                },
+                body: {
+                    text: 'Windows',
                     alignment: 'start',
                     font: {
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
+                        color: 'rgb(212,212,212)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            no: {
+                position: {
+                    x: 350,
+                    y: 357,
+                },
+                isDraggable: true,
+                states: ['stage2'],
+                connections: [{
+                    to: 'stage2',
+                    isEditable: false,
+                    line: {
+                        weight: 1,
+                        color: 'rgb(212,212,212)',
+                        enableBezierCurves: true,
+                        dashed: [5, 5],
+                    },
+                    connector: {
+                        shape: 'triangle',
+                        dimension: {
+                            width: 10,
+                            height: 10
+                        },
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)',
+                    },
+                    animation: {
+                        speed: 5,
+                        type: 'circle',
+                        fillColor: 'rgb(247, 129, 244)',
+                        particleDistance: 20,
+                    },
+                }, ],
+                background: {
+                    color: 'rgb(59, 64, 66)',
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
+                },
+                border: {
+                    radius: 20,
+                    lineWidth: 1,
+                    color: 'rgb(212, 212, 212)',
+                    selected: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                    hover: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                },
+                header: {
+                    text: 'Build',
+                    alignment: 'center',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -926,52 +1212,147 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
                         bottom: 15,
                     },
                     divider: {
-                        color: 'rgba(0,0,0,0.2)',
-                        width: 2,
+                        color: 'rgb(212, 212, 212)',
+                        width: 1,
                     },
                 },
                 body: {
-                    text: 'New Event Created',
+                    text: 'Linux',
                     alignment: 'start',
                     font: {
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
+                        color: 'rgb(212,212,212)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                },
+            },
+            stage2: {
+                position: {
+                    x: 196,
+                    y: 580,
+                },
+                isDraggable: true,
+                states: ['start'],
+                connections: [{
+                    to: 'end',
+                    isEditable: false,
+                    line: {
+                        weight: 1,
+                        color: 'rgb(212,212,212)',
+                        enableBezierCurves: true,
+                        dashed: [5, 5],
+                    },
+                    connector: {
+                        shape: 'triangle',
+                        dimension: {
+                            width: 10,
+                            height: 10
+                        },
+                        color: 'rgb(212,212,212)',
+                        fillColor: 'rgb(212,212,212)',
+                    },
+                    animation: {
+                        speed: 5,
+                        type: 'circle',
+                        fillColor: 'rgb(247, 129, 244)',
+                        particleDistance: 20,
+                    },
+                }, ],
+                background: {
+                    color: 'rgb(59, 64, 66)',
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
+                },
+                border: {
+                    radius: 20,
+                    lineWidth: 1,
+                    color: 'rgb(212, 212, 212)',
+                    selected: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                    hover: {
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
+                    },
+                },
+                header: {
+                    text: 'Deploy',
+                    alignment: 'center',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgb(212,212,212)',
+                        size: 20,
+                        weight: 'bold',
+                    },
+                    padding: {
+                        top: 15,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                    },
+                    divider: {
+                        color: 'rgb(212, 212, 212)',
+                        width: 1,
+                    },
+                },
+                body: {
+                    text: 'Sandbox',
+                    alignment: 'start',
+                    font: {
+                        family: 'Arial',
+                        style: 'normal',
+                        variant: 'normal',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
                 },
             },
             end: {
-                x: 700,
-                y: 72,
+                position: {
+                    x: 219,
+                    y: 773,
+                },
                 isDraggable: true,
                 isConnectable: true,
                 canConnect: true,
                 background: {
-                    color: 'rgb(255,0,0)',
+                    color: 'rgb(59, 64, 66)',
+                },
+                shadow: {
+                    offsetX: 10,
+                    offsetY: 10,
+                    color: 'black',
+                    blur: 0
                 },
                 border: {
                     radius: 20,
-                    padding: {
-                        top: 50,
-                        right: 50,
-                        bottom: 50,
-                        left: 50,
-                    },
-                    normal: {
-                        width: 2,
-                        color: 'transparent',
-                    },
+                    lineWidth: 1,
+                    color: 'rgb(212, 212, 212)',
                     selected: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
                     },
                     hover: {
-                        width: 2,
-                        color: 'black',
+                        lineWidth: 1,
+                        color: 'rgb(212, 212, 212)',
                     },
+                },
+                padding: {
+                    top: 50,
+                    right: 50,
+                    bottom: 50,
+                    left: 50,
                 },
                 body: {
                     text: 'End',
@@ -980,7 +1361,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
                         family: 'Arial',
                         style: 'normal',
                         variant: 'normal',
-                        color: 'rgba(0,0,0,0.6)',
+                        color: 'rgb(212,212,212)',
                         size: 20,
                         weight: 'bold',
                     },
@@ -996,7 +1377,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 </html>
 ```
 
-# Schema
+# Documentation
 
 ## Flow
 

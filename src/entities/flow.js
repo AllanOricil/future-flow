@@ -1,13 +1,6 @@
 import Canvas from './canvas.js';
 
 export default class Flow {
-    static MAX_SCALE() {
-        return 2;
-    }
-    static MIN_SCALE() {
-        return 0.2;
-    }
-
     constructor({
         canvas,
         options,

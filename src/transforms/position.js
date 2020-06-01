@@ -4,8 +4,8 @@ export default class Position {
         x,
         y
     }) {
-        this._x = x || 0;
-        this._y = y || 0;
+        this._x = x;
+        this._y = y;
     }
 
     get x() {

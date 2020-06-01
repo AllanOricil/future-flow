@@ -7,6 +7,7 @@ import {
 import Position from '../transforms/position.js';
 import Dimension from '../transforms/dimension.js';
 import Padding from '../styles/padding.js';
+import Transform from '../transforms/transform.js';
 
 export default class Entity extends EventEmitter {
     static get MAX_WIDTH() {
@@ -110,9 +111,11 @@ export default class Entity extends EventEmitter {
         this._hover = false;
         this._z = 0;
 
-        this._position = position ? (typeof position === 'Position' ? position : new Position(position)) : Entity.POSITION;
+        this._transform = new Transform({
+            position,
+            dimension
+        });
         this._oldPosition = new Position(position);
-        this._dimension = dimension ? (typeof dimension === 'Dimension' ? dimension : new Dimension(dimension)) : Entity.DIMENSION;
         this._padding = padding ? (typeof padding === 'Padding' ? padding : new Padding(padding)) : Entity.PADDING;
         this._parent = parent;
         this._children = [];
@@ -213,30 +216,6 @@ export default class Entity extends EventEmitter {
         return syntaxHighlight(this.toString());
     }
 
-    get sides() {
-        return [{
-                x: this._position.x + this._dimension.width / 2,
-                y: this._position.y,
-                name: 'top',
-            },
-            {
-                x: this._position.x + this._dimension.width,
-                y: this._position.y + this._dimension.height / 2,
-                name: 'right',
-            },
-            {
-                x: this._position.x + this._dimension.width / 2,
-                y: this._position.y + this._dimension.height,
-                name: 'bottom',
-            },
-            {
-                x: this._position.x,
-                y: this._position.y + this._dimension.height / 2,
-                name: 'left',
-            },
-        ];
-    }
-
     set state(newState) {
         if (this.states.includes(newState))
             this.emit(newState, {
@@ -253,11 +232,11 @@ export default class Entity extends EventEmitter {
     }
 
     get dimension() {
-        return this._dimension;
+        return this._transform.dimension;
     }
 
     get position() {
-        return this._position;
+        return this._transform.position;
     }
 
     get children() {
@@ -269,9 +248,9 @@ export default class Entity extends EventEmitter {
     }
 
     set position(newValue) {
-        this._oldPosition = new Position(this._position);
-        this._position.x = newValue.x;
-        this._position.y = newValue.y;
+        this._oldPosition = new Position(this._transform.position);
+        this._transform.position.x = newValue.x;
+        this._transform.position.y = newValue.y;
     }
 
     get oldPosition() {

@@ -2,6 +2,7 @@ import Rotation from "../transforms/rotation";
 import Border from "../styles/border";
 import Shadow from "../styles/shadow";
 import Background from "../styles/background";
+import Transform from "../transforms/transform";
 
 export default class Shape {
 
@@ -46,13 +47,18 @@ export default class Shape {
         position,
         dimension,
         rotation,
+        scale,
         background,
         border,
         shadow
     }) {
-        this._position = position;
-        this._dimension = dimension;
-        this._rotation = rotation ? (typeof rotation === 'Rotation' ? rotation : new Rotation(rotation)) : Shape.ROTATION;
+
+        this._transform = new Transform({
+            position,
+            dimension,
+            rotation,
+            scale
+        });
         this._border = border ? (typeof border === 'Border' ? border : new Border(border)) : Shape.BORDER;
         this._background = background ? (typeof background === 'Background' ? background : new Background(background)) : Shape.BACKGROUND;
         this._shadow = shadow ? (typeof shadow === 'Shadow' ? shadow : new Shadow(shadow)) : Shape.SHADOW;
@@ -73,29 +79,29 @@ export default class Shape {
 
     rotateFromPosition(ctx, position) {
         ctx.translate(position.x, position.y);
-        ctx.rotate(this._rotation.angle);
+        ctx.rotate(this._transform.rotation.angle);
         ctx.translate(-position.x, -position.y);
     }
 
     get sides() {
-        const middleWidth = this._dimension.width / 2;
-        const middleHeight = this._dimension.height / 2;
+        const middleWidth = this._transform.dimension.width / 2;
+        const middleHeight = this._transform.dimension.height / 2;
         return {
             top: {
-                x: this._position.x + middleWidth,
-                y: this._position.y
+                x: this._transform.position.x + middleWidth,
+                y: this._transform.position.y
             },
             right: {
-                x: this._position.x + this._dimension.width,
-                y: this._position.y + middleHeight
+                x: this._transform.position.x + this._transform.dimension.width,
+                y: this._transform.position.y + middleHeight
             },
             bottom: {
-                x: this._position.x + middleWidth,
-                y: this._position.y + this._dimension.height
+                x: this._transform.position.x + middleWidth,
+                y: this._transform.position.y + this._transform.dimension.height
             },
             left: {
-                x: this._position.x,
-                y: this._position.y + middleHeight
+                x: this._transform.position.x,
+                y: this._transform.position.y + middleHeight
             },
         };
     }
@@ -117,7 +123,7 @@ export default class Shape {
     }
 
     get rotation() {
-        return this._rotation;
+        return this._transform.rotation;
     }
 
     get shadow() {
@@ -125,15 +131,15 @@ export default class Shape {
     }
 
     set rotation(newValue) {
-        this._rotation.angle = newValue;
+        this._transform.rotation.angle = newValue;
     }
 
     get position() {
-        return this._position;
+        return this._transform.position;
     }
 
     set position(newValue) {
-        this._position.x = newValue.x;
-        this._position.y = newValue.y;
+        this._transform.position.x = newValue.x;
+        this._transform.position.y = newValue.y;
     }
 }

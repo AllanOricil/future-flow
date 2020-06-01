@@ -6,7 +6,10 @@ export default class Rotation {
         referential
     }) {
         this._angle = angle;
-        this._referential = new Position(referential);
+        this._referential = referential ? new Position(referential) : new Position({
+            x: 0,
+            y: 0
+        });
     }
 
     get angle() {

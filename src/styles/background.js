@@ -1,24 +1,18 @@
 import Color from './color.js';
+import Image from '../entities/image.js';
 export default class Background {
     constructor({
         color,
         image
     }) {
-        this._color = new Color(color);
-        if (image) {
-            this._image = image ? new Image() : null;
-            this._image.addEventListener('load', () => {
-                this._loaded = true;
-            });
-        }
+        this._color = color ? new Color(color) : null;
+        this._image = image ? new Image({
+            image
+        }) : null;
     }
 
     get color() {
         return this._color;
-    }
-
-    set color(newColor) {
-        this._color = new Color(newColor);
     }
 
     get image() {

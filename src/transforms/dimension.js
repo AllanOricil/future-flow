@@ -4,8 +4,8 @@ export default class Dimension {
         width,
         height
     }) {
-        this._width = width || 0;
-        this._height = height || 0;
+        this._width = width;
+        this._height = height;
     }
 
     get width() {

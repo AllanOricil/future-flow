@@ -17,6 +17,22 @@ export default class Font {
         this._color = new Color(color);
         this._size = size;
         this._weight = weight;
+        this._setFontDimensions();
+    }
+
+    set family(newValue) {
+        this._family = newValue;
+        this._setFontDimensions();
+    }
+
+    set fontSize(newValue) {
+        this._fontSize = newValue;
+        this._setFontDimensions();
+    }
+
+    set fontWeight(newValue) {
+        this._fontSize = newValue;
+        this._setFontDimensions();
     }
 
     get font2Canvas() {
@@ -48,7 +64,11 @@ export default class Font {
     }
 
     get dimensions() {
-        return getTextHeight({
+        return this._dimensions;
+    }
+
+    _setFontDimensions() {
+        this._dimensions = getTextHeight({
             fontFamily: this._family,
             fontSize: this._size,
             fontWeight: this._weight,

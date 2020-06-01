@@ -258,7 +258,7 @@ export default class Connection {
                         }
 
                         particle.toIndex++;
-                        if (particle.toIndex > this._pathPoints.length) {
+                        if (particle.toIndex >= this._pathPoints.length) {
                             this.removeParticle();
                         } else {
                             particle.x = particle.to.x;
