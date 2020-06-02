@@ -5,18 +5,10 @@ import {
     syntaxHighlight
 } from '../utils/json.js';
 import Position from '../transforms/position.js';
-import Dimension from '../transforms/dimension.js';
 import Padding from '../styles/padding.js';
 import Transform from '../transforms/transform.js';
 
 export default class Entity extends EventEmitter {
-    static get MAX_WIDTH() {
-        return 350;
-    }
-
-    static get MAX_HEIGHT() {
-        return 500;
-    }
 
     static get PADDING() {
         return {
@@ -24,74 +16,6 @@ export default class Entity extends EventEmitter {
             right: 15,
             bottom: 15,
             left: 15,
-        };
-    }
-
-    static get DIMENSION() {
-        return {
-            width: 0,
-            height: 0
-        };
-    }
-
-    static get POSITION() {
-        return {
-            x: 0,
-            y: 0
-        };
-    }
-
-    static get ROTATION() {
-        return {
-            angle: 0
-        };
-    }
-
-    static get ICON() {
-        return {
-            src: null,
-            dimension: Entity.DIMENSION,
-            padding: Entity.PADDING
-        };
-    }
-
-    static get BACKGROUND() {
-        return {
-            color: 'rgb(255,255,255)',
-        };
-    }
-
-    static get SHADOW() {
-        return {
-            offsetX: 0,
-            offsetY: 0,
-            color: 'rgb(0,0,0)',
-            blur: 0
-        };
-    }
-
-    static get COLOR() {
-        return {
-            red: 0,
-            green: 0,
-            blue: 0,
-            alpha: 1
-        };
-    }
-
-    static get BORDER() {
-        return {
-            radius: 5,
-            lineWidth: 1,
-            color: 'black',
-            selected: {
-                lineWidth: 1,
-                color: 'black',
-            },
-            hover: {
-                lineWidth: 1,
-                color: 'black',
-            },
         };
     }
 
