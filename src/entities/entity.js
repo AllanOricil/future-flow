@@ -10,6 +10,10 @@ import Transform from '../transforms/transform.js';
 
 export default class Entity extends EventEmitter {
 
+    static get MAX_WIDTH() {
+        return 350;
+    }
+
     static get PADDING() {
         return {
             top: 15,

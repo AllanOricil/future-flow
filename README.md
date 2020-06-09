@@ -230,7 +230,7 @@ Then in your Component
 
 ## Salesforce
 
-Download the library from the [CDN](https://unpkg.com/future-flow@0.0.10/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
+Download the library from the [CDN](https://unpkg.com/future-flow@0.0.11/dist/future-flow.js) and deploy it to Salesforce as a Static Resource.
 
 ![](images/salesforce_staticresource.JPG)
 
@@ -810,7 +810,7 @@ export default class Futureflow extends LightningElement {
 Import the script from the npm CDN
 
 ```html
-<script src="https://unpkg.com/future-flow@0.0.10/dist/future-flow.js"></script>
+<script src="https://unpkg.com/future-flow@0.0.11/dist/future-flow.js"></script>
 ```
 
 Then just initialize the flow using an instance of `futureFlow.Flow({ options, data })`
@@ -818,7 +818,7 @@ Then just initialize the flow using an instance of `futureFlow.Flow({ options, d
 ```html
 <html>
     <head>
-        <script src="https://unpkg.com/future-flow@0.0.10/dist/future-flow.js"></script>
+        <script src="https://unpkg.com/future-flow@0.0.11/dist/future-flow.js"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>

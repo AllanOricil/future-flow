@@ -36,10 +36,32 @@ export default class Block extends Entity {
             this.header.icon = header.icon ? new Icon({
                 src: header.icon.src,
                 parent: this,
-                position: header.icon.position || Entity.POSITION,
+                position: header.icon.position || {
+                    x: 0,
+                    y: 0
+                },
                 padding: header.icon.padding || Entity.PADDING,
-                dimension: header.icon.dimension || Entity.DIMENSION
-            }) : Entity.ICON;
+                dimension: {
+                    width: 25,
+                    height: 25
+                }
+            }) : {
+                parent: this,
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                padding: {
+                    top: 15,
+                    right: 15,
+                    bottom: 15,
+                    left: 15,
+                },
+                dimension: {
+                    width: 25,
+                    height: 25
+                }
+            };
         }
 
         if (body) {
@@ -84,7 +106,7 @@ export default class Block extends Entity {
             ctx.textAlign = this.header.alignment;
 
             let headerTextY;
-            if (this.header.font.dimensions.ascent < this.header.icon.dimension.height) {
+            if (this.header.icon && this.header.font.dimensions.ascent < this.header.icon.dimension.height) {
                 headerHeight =
                     this.header.icon.padding.top +
                     this.header.icon.dimension.height +
@@ -102,7 +124,11 @@ export default class Block extends Entity {
             if (this.header.alignment === 'center') {
                 headerTextX = this.position.x + (this.dimension.width) / 2;
             } else {
-                headerTextX = this.position.x + this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + this.header.padding.left;
+                if (this.header.icon) {
+                    headerTextX = this.position.x + this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + this.header.padding.left;
+                } else {
+                    headerTextX = this.position.x + this.header.padding.left;
+                }
             }
 
             ctx.fillText(this.header.text, headerTextX, this.position.y + headerTextY);
@@ -118,6 +144,7 @@ export default class Block extends Entity {
                 ctx.closePath();
                 ctx.restore();
             }
+
 
             headerWidth = this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + ctx.measureText(this.header.text).width + this.header.padding.left + this.header.padding.right;
 
