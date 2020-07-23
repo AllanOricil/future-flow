@@ -11,7 +11,7 @@
         "uglify": "uglifyjs dist/index.js -o dist/index.min.js -c -m",
         "build": "npx webpack --config webpack.config.js",
         "start": "npx webpack --watch --config webpack.dev.config.js",
-        "prepublish": "node .scripts/prepublish.js && npm run build"
+        "prepublish": "npm run build"
     },
     "repository": {
         "type": "git",

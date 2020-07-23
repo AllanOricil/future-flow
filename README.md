@@ -29,7 +29,6 @@ This project aims to ease the creation of Animated Flow Diagrams using HTML5 Can
 -   [x] Flow Animations.
 -   [ ] Organize Flows using Layers.
 -   [ ] Flows of Flows.
--   [ ] Export Flow as Image.
 -   [ ] Export Flow as GIF.
 
 # How to Use
