@@ -18,7 +18,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
-    <script src="https://unpkg.com/future-flow@0.1.0/dist/future-flow.js"></script>
+    <script src="https://unpkg.com/future-flow@0.1.2/dist/future-flow.js"></script>
     <style>
         body {
             margin: 0px;
@@ -131,48 +131,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="border-radius">Border Radius</label>
+                        <label for="entity-border-radius">Border Radius</label>
                         <input type="range" class="form-control p-0" value="0" min="0" max="50" step="1"
-                            id="border-radius" />
+                            id="entity-border-radius" />
                     </div>
-                    <div class="form-group">
-                        <label for="entity-border-selected-color">Border Color [onSelected]</label>
-                        <input type="color" class="form-control" id="entity-border-selected-color"
-                            style=" height: 50;padding: 0; border: 0;  margin: 0;" />
+                    <div class="form-group" id="entity-header-group">
+                        <label for="entity-header">Header</label>
+                        <textarea class="form-control" id="entity-header" rows="3"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="entity-border-selected-width">Border Width [onSelected]</label>
-                        <input type="range" class="form-control p-0" value="0" min="0" max="50" step="1"
-                            id="entity-border-selected-width" style=" height: 50;padding: 0; border: 0;  margin: 0;" />
+                    <div class="form-group" id="entity-body-group">
+                        <label for="entity-body">Body</label>
+                        <textarea class="form-control" id="entity-body" rows="3"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="entity-border-hover-color">Border Color [onHover]</label>
-                        <input type="color" class="form-control" id="entity-border-hover-color"
-                            style=" height: 50;padding: 0; border: 0;  margin: 0;" />
-                    </div>
-                    <div class="form-group">
-                        <label for="entity-border-hover-width">Border Width [onHover]</label>
-                        <input type="range" class="form-control p-0" value="0" min="0" max="50"
-                            id="entity-border-hover-width" style=" height: 50;padding: 0; border: 0;  margin: 0;" />
-                    </div>
-                    <div class="form-group">
-                        <label for="header">Header</label>
-                        <textarea class="form-control" id="header" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="body">Body</label>
-                        <textarea class="form-control" id="body" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="footer">Footer</label>
-                        <textarea class="form-control" id="footer" rows="3"></textarea>
+                    <div class="form-group" id="entity-footer-group">
+                        <label for="entity-footer">Footer</label>
+                        <textarea class="form-control" id="entity-footer" rows="3"></textarea>
                     </div>
                 </form>
             </div>
-            <!--
-                <div class="d-flex h-35 overflow-auto">
-                    <pre id="entitydata"></pre>
-                </div>-->
         </div>
     </div>
 
@@ -728,33 +704,17 @@
 
         let selectedEntity = null
         const entityName = document.getElementById('entity-name')
-        const entityBackgroundColorInput = document.getElementById(
-            'entity-background-color'
-        )
-        const entityBodyTextInput = document.getElementById('body')
-        const entityHeaderTextInput = document.getElementById('header')
-        const entityFooterTextInput = document.getElementById('footer')
-        const entityBorderRadiusInput = document.getElementById(
-            'border-radius'
-        )
-        const entityBorderColorInput = document.getElementById(
-            'entity-border-color'
-        )
-        const entityBorderWidthInput = document.getElementById(
-            'entity-border-width'
-        )
-        const entityBorderSelectedColorInput = document.getElementById(
-            'entity-border-selected-color'
-        )
-        const entityBorderSelectedWidthInput = document.getElementById(
-            'entity-border-selected-width'
-        )
-        const entityBorderHoverColorInput = document.getElementById(
-            'entity-border-hover-color'
-        )
-        const entityBorderHoverWidthInput = document.getElementById(
-            'entity-border-hover-width'
-        )
+        const entityBackgroundColorInput = document.getElementById('entity-background-color')
+        const entityBodyTextInput = document.getElementById('entity-body')
+        const entityHeaderTextInput = document.getElementById('entity-header')
+        const entityFooterTextInput = document.getElementById('entity-footer')
+        const entityBorderRadiusInput = document.getElementById('entity-border-radius')
+        const entityBorderColorInput = document.getElementById('entity-border-color')
+        const entityBorderWidthInput = document.getElementById('entity-border-width')
+
+        const entityHeaderGroup = document.getElementById('entity-header-group')
+        const entityBodyGroup = document.getElementById('entity-body-group')
+        const entityFooterGroup = document.getElementById('entity-footer-group') 
 
         document
             .getElementById('close-form')
@@ -765,54 +725,35 @@
             })
 
         flow.on('mouseenterentity', event => {})
-
-        flow.on('mouseleaveentity', event => {
-            /*document.getElementById(
-                'entitydata'
-            ).innerHTML = event.detail.prettier()*/
-        })
-
+        flow.on('mouseleaveentity', event => {})
         flow.on('clickentity', event => {
-            /*document.getElementById(
-                'entitydata'
-            ).innerHTML = event.detail.prettier()*/
             document.getElementById('block-details').style.width = '300px'
             document.getElementById('block-details').style.opacity = '1'
             document.getElementById('form').classList.add('mx-2')
 
             selectedEntity = event.detail
+
+            if(!event.detail.header)entityHeaderGroup.style.display = 'none'
+            else entityHeaderGroup.style.display = 'block'
+            if(!event.detail.body) entityBodyGroup.style.display = 'none'
+            else entityBodyGroup.style.display = 'block'
+            if(!event.detail.footer) entityFooterGroup.style.display = 'none'
+            else entityFooterGroup.style.display = 'block'
+
             console.log(selectedEntity);
             entityName.innerText = event.detail.name
             entityBorderRadiusInput.value = event.detail.shape.border.radius
-            entityBackgroundColorInput.value =
-                event.detail.shape.background.color.hex
-            entityBodyTextInput.value = event.detail.body ?
-                event.detail.body.text :
-                null
-            entityHeaderTextInput.value = event.detail.header ?
-                event.detail.header.text :
-                null
-            entityFooterTextInput.value = event.detail.footer ?
-                event.detial.footer.text :
-                null
+            entityBackgroundColorInput.value = event.detail.shape.background.color.hex
+            entityBodyTextInput.value = event.detail.body ? event.detail.body.text : null
+            entityHeaderTextInput.value = event.detail.header ? event.detail.header.text : null
+            entityFooterTextInput.value = event.detail.footer ? event.detial.footer.text : null
             entityBorderColorInput.value = event.detail.shape.border.color.hex
-            entityBorderWidthInput.value = event.detail.shape.border.width
-            entityBorderSelectedColorInput.value =
-                event.detail.shape.border.selected.color.hex
-            entityBorderSelectedWidthInput.value =
-                event.detail.shape.border.selected.width
-            entityBorderHoverColorInput.value =
-                event.detail.shape.border.hover.color.hex
-            entityBorderHoverWidthInput.value =
-                event.detail.shape.border.hover.width
+            entityBorderWidthInput.value = event.detail.shape.border.lineWidth
         })
 
         flow.on('dbtouch', event => {})
-
         flow.on('touchstartentity', event => {})
-
         flow.on('touchendentity', event => {})
-
         flow.on('onkeypress', event => {})
 
         entityBackgroundColorInput.addEventListener('input', e => {
@@ -842,23 +783,7 @@
             selectedEntity.shape.border.width = e.target.value
         })
 
-        entityBorderSelectedColorInput.addEventListener('input', e => {
-            selectedEntity.shape.border.selected.color = e.target.value
-        })
-
-        entityBorderSelectedWidthInput.addEventListener('input', e => {
-            selectedEntity.shape.border.selected.width = e.target.value
-        })
-
-        entityBorderHoverColorInput.addEventListener('input', e => {
-            selectedEntity.shape.border.hover.color = e.target.value
-        })
-
-        entityBorderHoverWidthInput.addEventListener('input', e => {
-            selectedEntity.shape.border.hover.width = e.target.value
-        })
-
-        //Changing the block status will dispatch an Event that can be hooked with a Callback
+        //Changing the entity status will dispatch an Event that can be hooked with a Callback
         setTimeout(() => {
             flow.getEntityByName('start').state = 'start'
         }, 3000)
@@ -870,20 +795,23 @@
         }, 6000)
 
         setTimeout(() => {
-            flow.getEntityByName('yes').startAllAnimations()
+            flow.getEntityByName('yes')
+                .startAllAnimations()
         }, 9000)
 
         setTimeout(() => {
             flow.getEntityByName('stage2').state = 'start'
         }, 12000)
 
-        //Block Status Event Callback
+        //Entity Status Event Callback
         flow.getEntityByName('start').on('start', e => {
-            flow.getEntityByName('start').startAllAnimations()
+            flow.getEntityByName('start')
+                .startAllAnimations()
         })
 
         flow.getEntityByName('stage2').on('start', e => {
-            flow.getEntityByName('stage2').startAllAnimations()
+            flow.getEntityByName('stage2')
+                .startAllAnimations()
         })
     </script>
 </body>

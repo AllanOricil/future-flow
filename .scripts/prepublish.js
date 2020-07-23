@@ -15,7 +15,7 @@ let indexHtml = fs.readFileSync(`${WORK_DIR}/demo/index.html`, {
 });
 indexHtml = indexHtml.replace(
     'src="future-flow.js"',
-    `src="https://unpkg.com/future-flow@${nextVersion}/dist/future-flow.js"`
+    `src="https://unpkg.com/future-flow@${packageJson.version}/dist/future-flow.js"`
 );
 fs.writeFileSync(`${WORK_DIR}/demo/index.html`, indexHtml, {
     encoding: 'utf-8',
@@ -31,7 +31,7 @@ const regex = new RegExp(
 );
 readme = readme.replace(
     regex,
-    `https://unpkg.com/future-flow@${nextVersion}/dist/future-flow.js`
+    `https://unpkg.com/future-flow@${packageJson.version}/dist/future-flow.js`
 );
 fs.writeFileSync(`${WORK_DIR}/README.md`, readme, {
     encoding: 'utf-8',
