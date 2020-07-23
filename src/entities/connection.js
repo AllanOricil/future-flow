@@ -317,7 +317,7 @@ export default class Connection {
         this.startAnimation();
     }
 
-    endFlow() {
+    stopFlow() {
         this._flow = false;
     }
 

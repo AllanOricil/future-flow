@@ -7,23 +7,6 @@ const packageJsonString = fs.readFileSync(`${WORK_DIR}/package.json`, {
 });
 const packageJson = JSON.parse(packageJsonString);
 
-//COMPUTE NEXT PATCH
-const currentVersionTokens = packageJson.version.split('.');
-const major = currentVersionTokens[0];
-const minor = currentVersionTokens[1];
-const patch = currentVersionTokens[2];
-const nextPatch = parseInt(patch) + 1;
-const nextVersion = `${major}.${minor}.${nextPatch}`;
-
-//UPDATE PACKAGE
-const updatedPackage = packageJsonString.replace(
-    `${packageJson.version}`,
-    `${nextVersion}`
-);
-fs.writeFileSync(`${WORK_DIR}/package.json`, updatedPackage, {
-    encoding: 'utf-8',
-});
-
 //UPDATE DEMO
 fs.removeSync(`${WORK_DIR}/demo/index.html`);
 fs.copyFileSync(`${WORK_DIR}/dist/index.html`, `${WORK_DIR}/demo/index.html`);

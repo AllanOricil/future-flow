@@ -30,10 +30,10 @@ export default class Block extends Entity {
         this.state = state;
 
         if (header) {
-            this.header = header;
-            this.header.font = new Font(header.font);
-            this.header.padding = header.padding ? new Padding(header.padding) : Entity.PADDING;
-            this.header.icon = header.icon ? new Icon({
+            this._header = header;
+            this._header.font = new Font(header.font);
+            this._header.padding = header.padding ? new Padding(header.padding) : Entity.PADDING;
+            this._header.icon = header.icon ? new Icon({
                 src: header.icon.src,
                 parent: this,
                 position: header.icon.position || {
@@ -65,15 +65,15 @@ export default class Block extends Entity {
         }
 
         if (body) {
-            this.body = body;
-            this.body.font = new Font(body.font);
-            this.body.padding = body.padding ? new Padding(body.padding) : Entity.PADDING;
+            this._body = body;
+            this._body.font = new Font(body.font);
+            this._body.padding = body.padding ? new Padding(body.padding) : Entity.PADDING;
         }
 
         if (footer) {
-            this.footer = footer;
-            this.footer.font = new Font(footer.font);
-            this.footer.padding = footer.padding ? new Padding(footer.padding) : Entity.PADDING;
+            this._footer = footer;
+            this._footer.font = new Font(footer.font);
+            this._footer.padding = footer.padding ? new Padding(footer.padding) : Entity.PADDING;
         }
 
         this._shape = new Rectangle({
@@ -99,44 +99,44 @@ export default class Block extends Entity {
         //HEADER
         let headerHeight = 0;
         let headerWidth = 0;
-        if (this.header) {
+        if (this._header) {
             ctx.textBaseline = 'top';
-            ctx.font = `${this.header.font.style} ${this.header.font.variant} ${this.header.font.weight} ${this.header.font.size}px ${this.header.font.family}`;
-            ctx.fillStyle = this.header.font.color.hex;
-            ctx.textAlign = this.header.alignment;
+            ctx.font = `${this._header.font.style} ${this._header.font.variant} ${this._header.font.weight} ${this._header.font.size}px ${this._header.font.family}`;
+            ctx.fillStyle = this._header.font.color.hex;
+            ctx.textAlign = this._header.alignment;
 
             let headerTextY;
-            if (this.header.icon && this.header.font.dimensions.ascent < this.header.icon.dimension.height) {
+            if (this._header.icon && this._header.font.dimensions.ascent < this._header.icon.dimension.height) {
                 headerHeight =
-                    this.header.icon.padding.top +
-                    this.header.icon.dimension.height +
-                    this.header.icon.padding.bottom;
-                headerTextY = (headerHeight - this.header.font.dimensions.ascent) / 2;
+                    this._header.icon.padding.top +
+                    this._header.icon.dimension.height +
+                    this._header.icon.padding.bottom;
+                headerTextY = (headerHeight - this._header.font.dimensions.ascent) / 2;
             } else {
                 headerHeight =
-                    this.header.padding.top +
-                    this.header.font.dimensions.ascent +
-                    this.header.padding.bottom;
-                headerTextY = this.header.padding.top;
+                    this._header.padding.top +
+                    this._header.font.dimensions.ascent +
+                    this._header.padding.bottom;
+                headerTextY = this._header.padding.top;
             }
 
             let headerTextX = 0;
-            if (this.header.alignment === 'center') {
+            if (this._header.alignment === 'center') {
                 headerTextX = this.position.x + (this.dimension.width) / 2;
             } else {
-                if (this.header.icon) {
-                    headerTextX = this.position.x + this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + this.header.padding.left;
+                if (this._header.icon) {
+                    headerTextX = this.position.x + this._header.icon.dimension.width + this._header.icon.padding.left + this._header.icon.padding.right + this._header.padding.left;
                 } else {
-                    headerTextX = this.position.x + this.header.padding.left;
+                    headerTextX = this.position.x + this._header.padding.left;
                 }
             }
 
-            ctx.fillText(this.header.text, headerTextX, this.position.y + headerTextY);
+            ctx.fillText(this._header.text, headerTextX, this.position.y + headerTextY);
 
-            if (this.header.divider) {
+            if (this._header.divider) {
                 ctx.save();
-                ctx.strokeStyle = this.header.divider.color;
-                ctx.lineWidth = this.header.divider.width;
+                ctx.strokeStyle = this._header.divider.color;
+                ctx.lineWidth = this._header.divider.width;
                 ctx.beginPath();
                 ctx.moveTo(this.position.x, this.position.y + headerHeight);
                 ctx.lineTo(this.position.x + this.dimension.width, this.position.y + headerHeight);
@@ -146,24 +146,24 @@ export default class Block extends Entity {
             }
 
 
-            headerWidth = this.header.icon.dimension.width + this.header.icon.padding.left + this.header.icon.padding.right + ctx.measureText(this.header.text).width + this.header.padding.left + this.header.padding.right;
+            headerWidth = this._header.icon.dimension.width + this._header.icon.padding.left + this._header.icon.padding.right + ctx.measureText(this._header.text).width + this._header.padding.left + this._header.padding.right;
 
-            if (this.header.icon && this.header.icon.loaded) {
-                this.header.icon.draw(ctx);
+            if (this._header.icon && this._header.icon.loaded) {
+                this._header.icon.draw(ctx);
             }
         }
 
         //BODY
         let bodyHeight = 0;
         let bodyWidth = 0;
-        if (this.body) {
+        if (this._body) {
             ctx.save();
-            ctx.font = this.body.font.font2Canvas;
-            ctx.fillStyle = this.body.font.color.hex;
-            ctx.textAlign = this.body.alignment;
+            ctx.font = this._body.font.font2Canvas;
+            ctx.fillStyle = this._body.font.color.hex;
+            ctx.textAlign = this._body.alignment;
             ctx.textBaseline = 'top';
             let lines = [];
-            const tokens = this.body.text.split(' ');
+            const tokens = this._body.text.split(' ');
             let currentLineIndex = 0;
             tokens.forEach(token => {
                 const tokenWidth = ctx.measureText(token).width;
@@ -171,10 +171,10 @@ export default class Block extends Entity {
                     lines[currentLineIndex] || ''
                 ).width;
                 if (
-                    this.body.padding.left +
+                    this._body.padding.left +
                     currentLineWidth +
                     tokenWidth +
-                    this.body.padding.right >
+                    this._body.padding.right >
                     Entity.MAX_WIDTH
                 ) {
                     currentLineIndex++;
@@ -188,31 +188,31 @@ export default class Block extends Entity {
                 const lineTextY =
                     this.position.y +
                     headerHeight +
-                    this.body.font.dimensions.height * index +
-                    this.body.padding.top;
+                    this._body.font.dimensions.height * index +
+                    this._body.padding.top;
 
-                ctx.fillText(line, this.position.x + this.body.padding.left, lineTextY);
+                ctx.fillText(line, this.position.x + this._body.padding.left, lineTextY);
 
                 const lineWidth = ctx.measureText(line).width;
                 bodyWidth = lineWidth > bodyWidth ? lineWidth : bodyWidth;
             });
             bodyHeight =
-                this.body.padding.top +
-                lines.length * this.body.font.dimensions.height +
-                this.body.padding.bottom;
+                this._body.padding.top +
+                lines.length * this._body.font.dimensions.height +
+                this._body.padding.bottom;
 
-            bodyWidth += this.body.padding.left + this.body.padding.right;
+            bodyWidth += this._body.padding.left + this._body.padding.right;
             ctx.restore();
         }
 
         //FOOTER
         let footerHeight = 0;
         let footerWidth = 0;
-        if (this.footer) {
-            if (this.footer.divider) {
+        if (this._footer) {
+            if (this._footer.divider) {
                 ctx.save();
-                ctx.strokeStyle = this.footer.divider.color;
-                ctx.lineWidth = this.footer.divider.width;
+                ctx.strokeStyle = this._footer.divider.color;
+                ctx.lineWidth = this._footer.divider.width;
                 ctx.beginPath();
                 ctx.moveTo(this.position.x, this.position.y + headerHeight + bodyHeight);
                 ctx.lineTo(this.position.x + this.dimension.width, this.position.y + headerHeight + bodyHeight);
@@ -222,24 +222,24 @@ export default class Block extends Entity {
             }
 
             ctx.textBaseline = 'top';
-            ctx.font = `${this.footer.font.style} ${this.footer.font.variant} ${this.footer.font.weight} ${this.footer.font.size}px ${this.footer.font.family}`;
-            ctx.fillStyle = this.footer.font.color.hex;
-            ctx.textAlign = this.footer.alignment;
+            ctx.font = `${this._footer.font.style} ${this._footer.font.variant} ${this._footer.font.weight} ${this._footer.font.size}px ${this._footer.font.family}`;
+            ctx.fillStyle = this._footer.font.color.hex;
+            ctx.textAlign = this._footer.alignment;
             ctx.alignment = 'top';
 
             ctx.fillText(
-                this.footer.text,
-                this.position.x + this.footer.padding.left,
-                this.position.y + headerHeight + bodyHeight + this.footer.padding.top
+                this._footer.text,
+                this.position.x + this._footer.padding.left,
+                this.position.y + headerHeight + bodyHeight + this._footer.padding.top
             );
             footerHeight =
-                this.footer.padding.top +
-                this.footer.font.dimensions.height +
-                this.footer.padding.bottom;
+                this._footer.padding.top +
+                this._footer.font.dimensions.height +
+                this._footer.padding.bottom;
             footerWidth =
-                this.footer.padding.left +
-                ctx.measureText(this.footer.text).width +
-                this.footer.padding.right;
+                this._footer.padding.left +
+                ctx.measureText(this._footer.text).width +
+                this._footer.padding.right;
         }
 
         //CALCULATES BLOCK'S WIDTH AND HEIGHT
@@ -258,5 +258,18 @@ export default class Block extends Entity {
         this.connections.forEach(connection => {
             connection.draw(ctx);
         });
+    }
+
+
+    get header(){
+        return this._header;
+    }
+
+    get footer(){
+        return this._footer;
+    }
+
+    get body(){
+        return this._body;
     }
 }

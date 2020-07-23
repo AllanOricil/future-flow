@@ -15,8 +15,16 @@ export default class Background {
         return this._color;
     }
 
+    set color(newColor){
+        this._color = new Color(newColor);
+    }
+
     get image() {
         return this._image;
+    }
+
+    set Image(newImage){
+        this._image = new Image(newImage);
     }
 
 }

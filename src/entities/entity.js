@@ -1,9 +1,7 @@
 import EventEmitter from '../utils/eventEmitter.js';
 import Connection from './connection.js';
 import stringify from 'json-stringify-safe';
-import {
-    syntaxHighlight
-} from '../utils/json.js';
+import { syntaxHighlight } from '../utils/json.js';
 import Position from '../transforms/position.js';
 import Padding from '../styles/padding.js';
 import Transform from '../transforms/transform.js';
@@ -69,7 +67,7 @@ export default class Entity extends EventEmitter {
     }
 
     startAnimation(block) {
-        const connection = this.getConnection(block);
+        const connection = this.getConnectionTo(block);
         connection.startAnimation();
     }
 
@@ -79,32 +77,25 @@ export default class Entity extends EventEmitter {
         });
     }
 
-    finishAllAnimations() {
+    stopAllAnimations() {
         this.connections.forEach(connection => {
-            connection.finishAnimation();
+            connection.stopAnimation();
         });
     }
 
-    stopAnimation(block) {
-        const connection = this.getConnection(block);
+    stopAnimation(entity) {
+        const connection = this.getConnectionTo(entity);
         connection.stopAnimation();
     }
 
-    finishAnimation(block) {
-        const connection = this.getConnection(block);
-        connection.finishAnimation();
-    }
-
-    getConnection(block) {
+    getConnectionTo(entity) {
         return this.connections.find(connection => {
-            return connection.to.name === block.name;
+            return connection.to.name === entity.name;
         });
     }
-
+    
     getConnectionByName(name) {
-        return this.connections.find(connection => {
-            return connection.to.name === name;
-        });
+        return this.connections.find(connection =>  connection.to.name === name);
     }
 
     removeConnection(to) {

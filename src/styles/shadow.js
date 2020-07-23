@@ -25,6 +25,10 @@ export default class Shadow {
         return this._color;
     }
 
+    set color(newColor){
+        this._color = new Color(newColor);
+    }
+
     get blur() {
         return this._blur;
     }

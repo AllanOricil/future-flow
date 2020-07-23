@@ -47,4 +47,8 @@ export default class Border {
     get lineWidth() {
         return this._lineWidth;
     }
+
+    set lineWidth(newLineWidth){
+        this._lineWidth = newLineWidth;
+    }
 }
