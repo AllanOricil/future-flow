@@ -55,6 +55,10 @@ export default class Font {
         return this._color;
     }
 
+    set color(newColor){
+        this._color = new Color(newColor);
+    }
+
     get size() {
         return this._size;
     }

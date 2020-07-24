@@ -26,9 +26,10 @@ export default class Image {
 
     set src(newValue) {
         this._src = newValue;
+        this._loaded = false;
     }
 
-    get transfor() {
+    get transform() {
         return this._transform;
     }
 

@@ -41,7 +41,10 @@ export default class Block extends Entity {
                     y: 0
                 },
                 padding: header.icon.padding || Entity.PADDING,
-                dimension: {
+                dimension: header.icon.dimension ? {
+                    width: header.icon.dimension.width,
+                    height: header.icon.dimension.height
+                }:{
                     width: 25,
                     height: 25
                 }

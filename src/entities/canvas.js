@@ -94,9 +94,9 @@ export default class Canvas {
 
         this.setData(data);
 
-        this._tickTime;
-        this._updateTime;
-        this._drawTime;
+        this._tickTime = 0;
+        this._updateTime = 0;
+        this._drawTime = 0;
 
         let _isCanvasBeingDragged = false;
         let _selectedEntities = [];
@@ -238,11 +238,11 @@ export default class Canvas {
                             }
                         }
 
-                        if (!conetionAlreadyExists) {
+                        /*if (!conetionAlreadyExists) {
                             firstdSelectedEntity.addConnection({
                                 to: secondSelectedEntity,
                             });
-                        }
+                        }*/
                         _selectedEntities = [];
                     }
                     return;
@@ -492,7 +492,10 @@ export default class Canvas {
     }
 
     stop() {
-        this._startTime = null;
+        this._tickTime = 0;
+        this._updateTime = 0;
+        this._drawTime = 0;
+        clearInterval(this._intervalId);
     }
 
     tick() {
