@@ -18,7 +18,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
-    <script src="https://unpkg.com/future-flow@0.1.3/dist/future-flow.js"></script>
+    <script src="https://unpkg.com/future-flow@0.1.4/dist/future-flow.js"></script>
     <style>
         body {
             margin: 0px;
@@ -129,22 +129,33 @@
                         <input type="range" class="form-control p-0" value="0" min="0" max="50" step="1"
                             id="entity-border-width" style=" height: 50;padding: 0; border: 0;  margin: 0;" />
                     </div>
-
                     <div class="form-group">
                         <label for="entity-border-radius">Border Radius</label>
                         <input type="range" class="form-control p-0" value="0" min="0" max="50" step="1"
                             id="entity-border-radius" />
                     </div>
                     <div class="form-group" id="entity-header-group">
-                        <label for="entity-header">Header</label>
+                        <label for="entity-header-text-color">Header Text Color</label>
+                        <input type="color" class="form-control" id="entity-header-text-color"
+                            style=" height: 50;padding: 0; border: 0;  margin: 0;" />
+                        
+                        <label for="entity-header">Header Text</label>
                         <textarea class="form-control" id="entity-header" rows="3"></textarea>
                     </div>
                     <div class="form-group" id="entity-body-group">
-                        <label for="entity-body">Body</label>
+                        <label for="entity-body-text-color">Body Text Color</label>
+                        <input type="color" class="form-control" id="entity-body-text-color"
+                            style=" height: 50;padding: 0; border: 0;  margin: 0;" />
+                            
+                        <label for="entity-body">Body Text</label>
                         <textarea class="form-control" id="entity-body" rows="3"></textarea>
                     </div>
                     <div class="form-group" id="entity-footer-group">
-                        <label for="entity-footer">Footer</label>
+                        <label for="entity-footer-text-color">Footer Text Color</label>
+                        <input type="color" class="form-control" id="entity-footer-text-color"
+                            style=" height: 50;padding: 0; border: 0;  margin: 0;" />
+
+                        <label for="entity-footer">Footer Text</label>
                         <textarea class="form-control" id="entity-footer" rows="3"></textarea>
                     </div>
                 </form>
@@ -705,27 +716,26 @@
         let selectedEntity = null
         const entityName = document.getElementById('entity-name')
         const entityBackgroundColorInput = document.getElementById('entity-background-color')
+        const entityHeaderTextColorInput = document.getElementById('entity-header-text-color')        
+        const entityBodyTextColorInput = document.getElementById('entity-body-text-color')
+        const entityFooterTextColorInput = document.getElementById('entity-footer-text-color')
         const entityBodyTextInput = document.getElementById('entity-body')
         const entityHeaderTextInput = document.getElementById('entity-header')
         const entityFooterTextInput = document.getElementById('entity-footer')
         const entityBorderRadiusInput = document.getElementById('entity-border-radius')
         const entityBorderColorInput = document.getElementById('entity-border-color')
         const entityBorderWidthInput = document.getElementById('entity-border-width')
-
         const entityHeaderGroup = document.getElementById('entity-header-group')
         const entityBodyGroup = document.getElementById('entity-body-group')
         const entityFooterGroup = document.getElementById('entity-footer-group') 
 
-        document
-            .getElementById('close-form')
-            .addEventListener('click', () => {
-                document.getElementById('block-details').style.width = '0px'
-                document.getElementById('block-details').style.opacity = '0'
-                document.getElementById('form').classList.remove('mx-2')
-            })
+        document.getElementById('close-form')
+                .addEventListener('click', () => {
+                    document.getElementById('block-details').style.width = '0px'
+                    document.getElementById('block-details').style.opacity = '0'
+                    document.getElementById('form').classList.remove('mx-2')
+                })
 
-        flow.on('mouseenterentity', event => {})
-        flow.on('mouseleaveentity', event => {})
         flow.on('clickentity', event => {
             document.getElementById('block-details').style.width = '300px'
             document.getElementById('block-details').style.opacity = '1'
@@ -733,15 +743,28 @@
 
             selectedEntity = event.detail
 
-            if(!event.detail.header)entityHeaderGroup.style.display = 'none'
-            else entityHeaderGroup.style.display = 'block'
-            if(!event.detail.body) entityBodyGroup.style.display = 'none'
-            else entityBodyGroup.style.display = 'block'
-            if(!event.detail.footer) entityFooterGroup.style.display = 'none'
-            else entityFooterGroup.style.display = 'block'
+            if(!event.detail.header){
+                entityHeaderGroup.style.display = 'none'
+            }else{
+                entityHeaderGroup.style.display = 'block'
+            }
+            if(!event.detail.body){
+                entityBodyGroup.style.display = 'none'
+            }
+            else{
+                entityBodyGroup.style.display = 'block'
+            }
+            if(!event.detail.footer){
+                entityFooterGroup.style.display = 'none'
+            }else{
+                entityFooterGroup.style.display = 'block'
+            }
 
             console.log(selectedEntity);
             entityName.innerText = event.detail.name
+            entityHeaderTextColorInput.value = event.detail.header ? event.detail.header.font.color.hex : null
+            entityBodyTextColorInput.value = event.detail.body ? event.detail.body.font.color.hex : null
+            entityFooterTextColorInput.value = event.detail.footer ? event.detail.footer.font.color.hex : null
             entityBorderRadiusInput.value = event.detail.shape.border.radius
             entityBackgroundColorInput.value = event.detail.shape.background.color.hex
             entityBodyTextInput.value = event.detail.body ? event.detail.body.text : null
@@ -750,11 +773,6 @@
             entityBorderColorInput.value = event.detail.shape.border.color.hex
             entityBorderWidthInput.value = event.detail.shape.border.lineWidth
         })
-
-        flow.on('dbtouch', event => {})
-        flow.on('touchstartentity', event => {})
-        flow.on('touchendentity', event => {})
-        flow.on('onkeypress', event => {})
 
         entityBackgroundColorInput.addEventListener('input', e => {
             selectedEntity.shape.background.color = e.target.value
@@ -781,6 +799,18 @@
 
         entityBorderWidthInput.addEventListener('input', e => {
             selectedEntity.shape.border.width = e.target.value
+        })
+
+        entityHeaderTextColorInput.addEventListener('input', e => {
+            selectedEntity.header.font.color = e.target.value
+        })
+
+        entityBodyTextColorInput.addEventListener('input', e => {
+            selectedEntity.body.font.color = e.target.value
+        })
+        
+        entityFooterTextColorInput.addEventListener('input', e => {
+            selectedEntity.footer.font.color = e.target.value
         })
 
         //Changing the entity status will dispatch an Event that can be hooked with a Callback
