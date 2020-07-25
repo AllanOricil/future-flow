@@ -1,12 +1,12 @@
-import EventEmitter from '../utils/eventEmitter.js';
 import Connection from '../entities/connection.js';
 import stringify from 'json-stringify-safe';
 import { syntaxHighlight } from '../utils/json.js';
 import Position from '../transforms/position.js';
 import Padding from '../styles/padding.js';
 import Transform from '../transforms/transform.js';
+import EventEmitter from './eventEmitter.js';
 
-export default class Entity extends EventEmitter {
+export default class Entity {
 
     static get MAX_WIDTH() {
         return 350;
@@ -28,7 +28,7 @@ export default class Entity extends EventEmitter {
         position,
         parent
     }, canvas) {
-        super();
+        this._eventEmitter = new EventEmitter();
         this._id = +new Date() + Math.random() * 100000;
         this.name = name;
         this._name = name;
@@ -47,8 +47,6 @@ export default class Entity extends EventEmitter {
         this._children = [];
         this._canvas = canvas;
     }
-
-    update(deltaTime) {}
 
     createEvent(event) {
         return new CustomEvent(event, {
@@ -133,6 +131,14 @@ export default class Entity extends EventEmitter {
 
     prettier() {
         return syntaxHighlight(this.toString());
+    }
+
+    on(event, callback) {
+        this._eventEmitter.on(event, callback);
+    }
+
+    emit(event, data) {
+        this._eventEmitter.emit(event, data);
     }
 
     set state(newState) {

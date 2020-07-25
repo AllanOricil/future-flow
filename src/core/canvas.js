@@ -1,8 +1,8 @@
-import EntityManager from './entityManager.js';
 import Position from '../transforms/position.js';
 import Conditional from '../entities/conditional.js';
 import Block from '../entities/block.js';
 import Transform from '../transforms/transform.js';
+import EntityManager from './entityManager.js';
 
 export default class Canvas {
 
@@ -16,7 +16,8 @@ export default class Canvas {
     static get SCALELIMITS() {
         return {
             max: 2,
-            min: 0.2
+            min: 0.2,
+            scaleFactor: 0.01
         };
     }
 
@@ -55,8 +56,9 @@ export default class Canvas {
             y: 0
         });
         this._scaleLimits = options && options.zoom ? {
-            max: options.zoom.max,
-            min: options.zoom.min,
+            max: options.zoom.max || Canvas.SCALELIMITS.max,
+            min: options.zoom.min || Canvas.SCALELIMITS.min,
+            scaleFactor: options.zoom.scaleFactor || Canvas.SCALELIMITS.scaleFactor
         } : Canvas.SCALELIMITS;
 
         this._transform = new Transform({
@@ -258,10 +260,14 @@ export default class Canvas {
         });
 
         this._el.addEventListener('wheel', e => {
-            const zoom = e.wheelDelta > 0 || e.deltaY < 0 ? 1.01 : 0.99;
-            this._ctx.translate(_currentTransformedCursor.x, _currentTransformedCursor.y);
-            this._ctx.scale(zoom, zoom);
-            this._ctx.translate(-_currentTransformedCursor.x, -_currentTransformedCursor.y);
+            _currentTransformedCursor = this.getTransformedPoint(e.offsetX, e.offsetY);
+            const zoom = e.wheelDelta > 0 || e.deltaY < 0 ? (1 + this._scaleLimits.scaleFactor) : (1 - this._scaleLimits.scaleFactor);
+            const futureZoomLevel = this._ctx.getTransform().a * zoom;
+            if(futureZoomLevel > this._scaleLimits.min && futureZoomLevel < this._scaleLimits.max){
+                this._ctx.translate(_currentTransformedCursor.x, _currentTransformedCursor.y);
+                this._ctx.scale(zoom, zoom);
+                this._ctx.translate(-_currentTransformedCursor.x, -_currentTransformedCursor.y);
+            }
         });
 
         let previousTouchStartTimestamp = null;
@@ -363,12 +369,18 @@ export default class Canvas {
                 var curDiff = Math.abs(
                     this._evCache[0].clientX - this._evCache[1].clientX
                 );
-
+                
+                const middleX = (this._evCache[0].clientX + this._evCache[1].clientX)/2;
+                const middleY = (this._evCache[0].clientY + this._evCache[1].clientY)/2;
+                const zoomPoint = this.getTransformedPoint(middleX, middleY);
                 if (this.prevDiff > 0) {
-                    const zoom = curDiff > this.prevDiff < 0 ? 1.01 : 0.99;
-                    this._ctx.translate(_currentTransformedCursor.x, _currentTransformedCursor.y);
-                    this._ctx.scale(zoom, zoom);
-                    this._ctx.translate(-_currentTransformedCursor.x, -_currentTransformedCursor.y);
+                    const zoom = curDiff > this.prevDiff < 0 ? (1 + this._scaleLimits.scaleFactor) : (1 - this._scaleLimits.scaleFactor);
+                    const futureZoomLevel = this._ctx.getTransform().a * zoom;
+                    if(futureZoomLevel > this._scaleLimits.min && futureZoomLevel < this._scaleLimits.max){
+                        this._ctx.translate(zoomPoint.x, zoomPoint.y);
+                        this._ctx.scale(zoom, zoom);
+                        this._ctx.translate(-zoomPoint.x, -zoomPoint.y);
+                    }
                 }
 
                 this.prevDiff = curDiff;

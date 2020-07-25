@@ -10,7 +10,7 @@
         "minify": "babel index.js -d dist",
         "uglify": "uglifyjs dist/index.js -o dist/index.min.js -c -m",
         "build": "npx webpack --config webpack.config.js",
-        "start": "npx webpack --watch --config webpack.dev.config.js",
+        "start": "webpack-dev-server --open --config webpack.dev.config.js",
         "prepublish": "node .scripts/prepublish.js && npm run build"
     },
     "repository": {

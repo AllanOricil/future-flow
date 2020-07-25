@@ -35,14 +35,6 @@ export default class Conditional extends Entity {
             border,
             background
         });
-
-        this.on('mouseenter', () => {
-            this._hover = true;
-        });
-
-        this.on('mouseleave', () => {
-            this._hover = false;
-        });
     }
 
     draw(ctx) {
