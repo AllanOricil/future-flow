@@ -9,11 +9,11 @@ export default class Position {
     }
 
     get x() {
-        return parseInt(this._x.toFixed(0));
+        return parseInt(this._x ? this._x.toFixed(0): 0);
     }
 
     get y() {
-        return parseInt(this._y.toFixed(0));
+        return parseInt(this._y ? this._y.toFixed(0): 0);
     }
 
     set x(newValue) {

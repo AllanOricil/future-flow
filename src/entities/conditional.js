@@ -1,4 +1,4 @@
-import Entity from './entity.js';
+import Entity from '../core/entity.js';
 import Font from '../styles/font.js';
 import Padding from '../styles/padding.js';
 import Diamond from '../shapes/diamond.js';

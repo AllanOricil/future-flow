@@ -1,9 +1,7 @@
 import EntityManager from './entityManager.js';
 import Position from '../transforms/position.js';
-import Dimension from '../transforms/dimension.js';
-import Scale from '../transforms/scale.js';
-import Conditional from './conditional.js';
-import Block from './block.js';
+import Conditional from '../entities/conditional.js';
+import Block from '../entities/block.js';
 import Transform from '../transforms/transform.js';
 
 export default class Canvas {
@@ -93,44 +91,60 @@ export default class Canvas {
         }
 
         this.setData(data);
-
+        this._isScrolling = false;
         this._tickTime = 0;
         this._updateTime = 0;
         this._drawTime = 0;
 
+        let _dragStartPosition = {x: 0, y: 0};
+        let _currentTransformedCursor = undefined;
         let _isCanvasBeingDragged = false;
         let _selectedEntities = [];
         let _entityBeingDragged = null;
         let _cancelClick = false;
         let _entityBeingHovered = null;
-        this._el.addEventListener('mousemove', e => {
-            const {
-                x,
-                y
-            } = this.mousePosition(e);
-            this._mouse.x = x;
-            this._mouse.y = y;
+    
+        this._el.addEventListener('mousedown', e => {
+            if (_entityBeingHovered) {
+                _entityBeingHovered._selected = true;
+                if (
+                    this._canMoveBlocks &&
+                    !_entityBeingDragged &&
+                    _entityBeingHovered.isDraggable
+                ) {
+                    _entityBeingDragged = _entityBeingHovered;
+                }
+                return;
+            }
 
+            _dragStartPosition = this.getTransformedPoint(e.offsetX, e.offsetY);
+            _isCanvasBeingDragged = true;
+        });
+
+        this._el.addEventListener('mousemove', e => {
+            this._mouse.x = e.offsetX;
+            this._mouse.y = e.offsetY;
+            _currentTransformedCursor = this.getTransformedPoint(e.offsetX, e.offsetY);
             if (_isCanvasBeingDragged) {
                 this._el.style.cursor = 'grabbing';
-                this.translate(e.movementX, e.movementY);
+                this._ctx.translate(_currentTransformedCursor.x - _dragStartPosition.x, _currentTransformedCursor.y - _dragStartPosition.y);
                 return;
             } else {
                 if (_entityBeingDragged) {
                     _cancelClick = true;
                     _entityBeingDragged.position = {
                         x: parseInt(
-                            (this._mouse.x - _entityBeingDragged.dimension.width / 2).toFixed(0)
+                            (_currentTransformedCursor.x - _entityBeingDragged.dimension.width / 2).toFixed(0)
                         ),
                         y: parseInt(
-                            (this._mouse.y - _entityBeingDragged.dimension.height / 2).toFixed(0)
+                            (_currentTransformedCursor.y - _entityBeingDragged.dimension.height / 2).toFixed(0)
                         )
                     };
                     return;
                 } else {
                     for (let i = 0; i < this._entityManager.entities.length; i++) {
                         let entity = this._entityManager.entities[i];
-                        if (entity.contains(this._mouse.x, this._mouse.y)) {
+                        if (entity.contains(this._mouse)) {
                             _entityBeingHovered = entity;
                             this._el.style.cursor = 'grabbing';
                             if (!entity._hover) {
@@ -159,21 +173,6 @@ export default class Canvas {
             }
 
             this._el.style.cursor = 'default';
-        });
-
-        this._el.addEventListener('mousedown', e => {
-            if (_entityBeingHovered) {
-                _entityBeingHovered._selected = true;
-                if (
-                    !_entityBeingDragged &&
-                    this._canMoveBlocks &&
-                    _entityBeingHovered.isDraggable
-                ) {
-                    _entityBeingDragged = _entityBeingHovered;
-                }
-                return;
-            }
-            _isCanvasBeingDragged = true;
         });
 
         this._el.addEventListener('mouseup', e => {
@@ -259,39 +258,21 @@ export default class Canvas {
         });
 
         this._el.addEventListener('wheel', e => {
-            console.log(e);
-            if (e.wheelDelta > 0 || e.deltaY < 0) {
-                this.scale = ({
-                    horizontal: 1.01,
-                    vertical: 1.01,
-                });
-            } else {
-                this.scale = ({
-                    horizontal: 0.99,
-                    vertical: 0.99,
-                });
-            }
+            const zoom = e.wheelDelta > 0 || e.deltaY < 0 ? 1.01 : 0.99;
+            this._ctx.translate(_currentTransformedCursor.x, _currentTransformedCursor.y);
+            this._ctx.scale(zoom, zoom);
+            this._ctx.translate(-_currentTransformedCursor.x, -_currentTransformedCursor.y);
         });
 
-        let previousTouchEvent = null;
         let previousTouchStartTimestamp = null;
         this._el.addEventListener('touchstart', e => {
             if (e.touches.length === 1) {
-                const ex = e.touches[0].clientX;
-                const ey = e.touches[0].clientY;
-                const {
-                    x,
-                    y
-                } = this.mousePosition({
-                    x: ex,
-                    y: ey,
-                });
-                this._mouse.x = x;
-                this._mouse.y = y;
+                this._mouse.x = e.touches[0].clientX;
+                this._mouse.y = e.touches[0].clientY;
 
                 for (let i = 0; i < this._entityManager.entities.length; i++) {
                     let entity = this._entityManager.entities[i];
-                    if (entity.contains(this._mouse.x, this._mouse.y)) {
+                    if (entity.contains(this._mouse)) {
                         _entityBeingHovered = entity;
                         if (!_entityBeingDragged) {
                             _entityBeingDragged = entity;
@@ -320,45 +301,32 @@ export default class Canvas {
             }
         });
 
+        let previousTouchEvent = null;
         this._el.addEventListener('touchmove', e => {
             console.log('TOUCH MOVE');
             if (e.touches.length === 1) {
-                const ex = e.touches[0].clientX;
-                const ey = e.touches[0].clientY;
-                const {
-                    x,
-                    y
-                } = this.mousePosition({
-                    x: ex,
-                    y: ey,
-                });
-                this._mouse.x = x;
-                this._mouse.y = y;
+                this._mouse.x = e.touches[0].clientX;
+                this._mouse.y = e.touches[0].clientY;
+                _currentTransformedCursor = this.getTransformedPoint(this._mouse.x, this._mouse.y);
                 if (_isCanvasBeingDragged && previousTouchEvent) {
-                    const pex = previousTouchEvent.touches[0].clientX;
-                    const pey = previousTouchEvent.touches[0].clientY;
-
-                    let previousEventPosition = this.mousePosition({
-                        x: pex,
-                        y: pey,
-                    });
-
-                    let deltaX =
-                        (this._mouse.x - previousEventPosition.x) *
-                        this._transform.scale.horizontal;
-                    let deltaY =
-                        (this._mouse.y - previousEventPosition.y) *
-                        this._transform.scale.vertical;
-                    this.translate(deltaX, deltaY);
+                    let _previousTransformedCursor = 
+                        this.getTransformedPoint(
+                            previousTouchEvent.touches[0].clientX, 
+                            previousTouchEvent.touches[0].clientY
+                        );
+                    this._ctx.translate(
+                        _currentTransformedCursor.x - _previousTransformedCursor.x,
+                        _currentTransformedCursor.y - _previousTransformedCursor.y
+                    );
                 } else {
                     if (_entityBeingDragged) {
                         _cancelClick = true;
                         _entityBeingDragged.position = {
                             x: parseInt(
-                                (this._mouse.x - _entityBeingDragged.dimension.width / 2).toFixed(0)
+                                (_currentTransformedCursor.x - _entityBeingDragged.dimension.width / 2).toFixed(0)
                             ),
                             y: parseInt(
-                                (this._mouse.y - _entityBeingDragged.dimension.height / 2).toFixed(0)
+                                (_currentTransformedCursor.y - _entityBeingDragged.dimension.height / 2).toFixed(0)
                             )
                         };
                     }
@@ -372,26 +340,7 @@ export default class Canvas {
             if (_entityBeingDragged) {
                 _entityBeingDragged = null;
             }
-            const ex = e.changedTouches[0].clientX;
-            const ey = e.changedTouches[0].clientY;
-            const {
-                x,
-                y
-            } = this.mousePosition({
-                x: ex,
-                y: ey,
-            });
-            this._mouse.x = x;
-            this._mouse.y = y;
-            for (let i = 0; i < this._entityManager.entities.length; i++) {
-                let entity = this._entityManager.entities[i];
-                if (entity.contains(this._mouse.x, this._mouse.y)) {
-                    this._el.dispatchEvent(entity.createEvent('touchendentity'));
-                }
-            }
-
             _isCanvasBeingDragged = false;
-
             previousTouchEvent = null;
         });
 
@@ -416,18 +365,10 @@ export default class Canvas {
                 );
 
                 if (this.prevDiff > 0) {
-                    if (curDiff > this.prevDiff) {
-                        this.scale = ({
-                            horizontal: 1.01,
-                            vertical: 1.01,
-                        });
-                    }
-                    if (curDiff < this.prevDiff) {
-                        this.scale = ({
-                            horizontal: 0.99,
-                            vertical: 0.99,
-                        });
-                    }
+                    const zoom = curDiff > this.prevDiff < 0 ? 1.01 : 0.99;
+                    this._ctx.translate(_currentTransformedCursor.x, _currentTransformedCursor.y);
+                    this._ctx.scale(zoom, zoom);
+                    this._ctx.translate(-_currentTransformedCursor.x, -_currentTransformedCursor.y);
                 }
 
                 this.prevDiff = curDiff;
@@ -476,70 +417,31 @@ export default class Canvas {
     }
 
     clearFrame() {
-        this._ctx.clearRect(0, 0, this._transform.dimension.width, this._transform.dimension.height);
+        this._ctx.save();
+        this._ctx.setTransform(1,0,0,1,0,0);
+        this._ctx.clearRect(0,0, this._el.width, this._el.height);
+        this._ctx.restore();
     }
 
-    translate(dx, dy) {
-        this._transform.position.x += dx;
-        this._transform.position.y += dy;
-    }
-
-    start() {
-        this._tickTime = new Date();
-        this._intervalId = setInterval(() => {
-            this.tick();
-        }, 1000 / this._fps);
-    }
-
-    stop() {
-        this._tickTime = 0;
-        this._updateTime = 0;
-        this._drawTime = 0;
-        clearInterval(this._intervalId);
-    }
-
-    tick() {
-        const startTime = new Date();
-        const deltaTime = startTime - this._endTime;
-        this.update(deltaTime);
-        this._updateTime = new Date() - startTime;
-        this.draw();
-        this._endTime = new Date();
-        this._drawTime = this._endTime - this._updateTime;
-        this._tickTime = this._endTime - startTime;
-    }
-
-    update(deltaTime) {
-        this._entityManager.entities.forEach(entity => {
-            entity.update(deltaTime);
-        });
+    start(){
+        setInterval(()=>{
+            this.draw();
+        }, 1000/this._fps);
     }
 
     draw() {
         this.clearFrame();
-        this._ctx.save();
-        this._ctx.translate(this._transform.position.x + 0.5, this._transform.position.y + 0.5);
-        this._ctx.scale(this._transform.scale.horizontal, this._transform.scale.vertical);
         this._entityManager.entities.forEach(entity => {
             entity.draw(this._ctx);
         });
-        this._ctx.restore();
     }
 
-    mousePosition(e) {
-        const canvasBoundingRect = this._el.getBoundingClientRect();
-        const scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft;
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const elementOffset = {
-            top: canvasBoundingRect.top + scrollTop,
-            left: canvasBoundingRect.left + scrollLeft,
-        };
-
-        return {
-            x: (e.x - this._transform.position.x - elementOffset.left) / this._transform.scale.horizontal,
-            y: (e.y - this._transform.position.y - elementOffset.top) / this._transform.scale.vertical,
-        };
+    getTransformedPoint(x, y) {
+        const transform = this._ctx.getTransform();
+        const inverseZoom = 1 / transform.a;
+        const transformedX = inverseZoom * x - inverseZoom * transform.e;
+        const transformedY = inverseZoom * y - inverseZoom * transform.f;
+        return { x: transformedX, y: transformedY };
     }
 
     setData(data) {
@@ -615,20 +517,6 @@ export default class Canvas {
 
     get entityManager() {
         return this._entityManager;
-    }
-
-    set scale(newValue) {
-        const newSh = this._transform.scale.horizontal * newValue.horizontal;
-        const newSv = this._transform.scale.vertical * newValue.vertical;
-        if (
-            newSh < this._scaleLimits.max &&
-            newSv < this._scaleLimits.max &&
-            newSh >= this._scaleLimits.min &&
-            newSv >= this._scaleLimits.min
-        ) {
-            this._transform.scale.horizontal = newSh;
-            this._transform.scale.vertical = newSv;
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-import Canvas from './canvas.js';
+import Canvas from '../core/canvas.js';
 
 export default class Flow {
     constructor({

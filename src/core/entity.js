@@ -1,5 +1,5 @@
 import EventEmitter from '../utils/eventEmitter.js';
-import Connection from './connection.js';
+import Connection from '../entities/connection.js';
 import stringify from 'json-stringify-safe';
 import { syntaxHighlight } from '../utils/json.js';
 import Position from '../transforms/position.js';
@@ -62,8 +62,8 @@ export default class Entity extends EventEmitter {
         this.connections.push(newConnection);
     }
 
-    contains() {
-        return this._canvas.ctx.isPointInPath(this._shape.path, this._canvas.mouse.x, this._canvas.mouse.y, 'nonzero');
+    contains(position) {
+        return this._canvas.ctx.isPointInPath(this._shape.path, position.x, position.y, 'nonzero');
     }
 
     startAnimation(block) {
